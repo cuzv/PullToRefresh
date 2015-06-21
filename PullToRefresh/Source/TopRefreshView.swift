@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TopRefreshView: UIView, TopRefreshContainerViewDelegate {
+public class TopRefreshView: UIView, RefreshContainerViewDelegate {
     
     private let backCircluarLayer: CAShapeLayer
     private let frontCircluarLayer: CAShapeLayer
@@ -26,11 +26,17 @@ class TopRefreshView: UIView, TopRefreshContainerViewDelegate {
         setupActivityIndicator()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    #if DEBUG
+    deinit {
+        print("\(__FILE__):\(__LINE__):\(__FUNCTION__)", appendNewline: true)
+    }
+    #endif
+    
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         guard let selfSuperview = superview else {
@@ -90,15 +96,15 @@ class TopRefreshView: UIView, TopRefreshContainerViewDelegate {
     
     // MARK: TopRefreshContainerViewDelegate
     
-    func topRefreshContainerView(containerView: TopRefreshContainerView, didChangeState state: TopRefreshContainerViewState) -> Void {
+    public func refreshContainerView(containerView: RefreshContainerView, didChangeState state: RefreshContainerViewState) -> Void {
         handleStateChange(state)
     }
     
-    func topRefreshContainerView(containerView: TopRefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void {
+    public func refreshContainerView(containerView: RefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void {
         handleProgress(progress, forState: containerView.state)
     }
 
-    private func handleStateChange(state: TopRefreshContainerViewState) -> Void {
+    private func handleStateChange(state: RefreshContainerViewState) -> Void {
         print("\(__FUNCTION__)", appendNewline: true)
         if state == .None {
             UIView.animateKeyframesWithDuration(DefaultResetContentInsetAnimationDuration,
@@ -117,7 +123,7 @@ class TopRefreshView: UIView, TopRefreshContainerViewDelegate {
         }
     }
     
-    private func handleProgress(progress: CGFloat, forState state: TopRefreshContainerViewState) -> Void {
+    private func handleProgress(progress: CGFloat, forState state: RefreshContainerViewState) -> Void {
         if progress > 0 && state == .None {
             frontCircluarLayer.hidden = false
             backCircluarLayer.hidden = false

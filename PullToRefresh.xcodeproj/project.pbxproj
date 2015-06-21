@@ -22,6 +22,7 @@
 		466AA2121B31B1AA00FA13B3 /* BottomRefreshContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466AA2111B31B1AA00FA13B3 /* BottomRefreshContainerView.swift */; };
 		46993B6F1B345ED500D42418 /* UIScrollView+PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46993B6E1B345ED500D42418 /* UIScrollView+PullToRefresh.swift */; };
 		46F54A9B1B36748900C6DCB5 /* RefreshContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A9A1B36748900C6DCB5 /* RefreshContainerView.swift */; };
+		46F54B201B36FE5B00C6DCB5 /* BottomRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F54B1F1B36FE5B00C6DCB5 /* BottomRefreshView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		466AA2111B31B1AA00FA13B3 /* BottomRefreshContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomRefreshContainerView.swift; sourceTree = "<group>"; };
 		46993B6E1B345ED500D42418 /* UIScrollView+PullToRefresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PullToRefresh.swift"; sourceTree = "<group>"; };
 		46F54A9A1B36748900C6DCB5 /* RefreshContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshContainerView.swift; sourceTree = "<group>"; };
+		46F54B1F1B36FE5B00C6DCB5 /* BottomRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomRefreshView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 				464BE4101B35C9FE0062E131 /* UIView+FirstReponder.swift */,
 				464BE4121B3669B40062E131 /* CGFloat+Convert.swift */,
 				46188BAD1B347BD200F6CF2C /* TopRefreshView.swift */,
+				46F54B1F1B36FE5B00C6DCB5 /* BottomRefreshView.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				466AA20D1B31B11E00FA13B3 /* SampleViewController.swift in Sources */,
 				46F54A9B1B36748900C6DCB5 /* RefreshContainerView.swift in Sources */,
 				46188BAE1B347BD200F6CF2C /* TopRefreshView.swift in Sources */,
+				46F54B201B36FE5B00C6DCB5 /* BottomRefreshView.swift in Sources */,
 				466AA20C1B31B11E00FA13B3 /* AppDelegate.swift in Sources */,
 				464BE4131B3669B40062E131 /* CGFloat+Convert.swift in Sources */,
 			);
@@ -443,6 +447,7 @@
 				INFOPLIST_FILE = PullToRefresh/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.foobar.PullToRefresh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -457,6 +462,7 @@
 				INFOPLIST_FILE = PullToRefresh/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.foobar.PullToRefresh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

@@ -36,7 +36,7 @@ public extension UIScrollView {
         }
     }
     
-    // MARK: TopRefreshContainerView
+    // MARK: - TopRefreshContainerView
     
     public func addTopRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
         removeTopPullToRefresh()
@@ -45,6 +45,11 @@ public extension UIScrollView {
         addSubview(topRefreshContainerView)
         self.topRefreshContainerView = topRefreshContainerView
         self.topRefreshContainerView?.actionCallback = actionCallback
+    }
+    
+    public func removeTopPullToRefresh() -> Void {
+        topRefreshContainerView?.removeFromSuperview()
+        topRefreshContainerView = nil
     }
     
     public func beginToPullToRefresh() -> Void {
@@ -59,10 +64,38 @@ public extension UIScrollView {
         self.topRefreshContainerView?.enable = enable
     }
     
-    public func removeTopPullToRefresh() -> Void {
-        topRefreshContainerView?.removeFromSuperview()
-        topRefreshContainerView = nil
+    // MARK: - BottomRefreshContainerView
+    
+    public func addBottomRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
+        removeBottomPullToRefresh()
+        
+        let bottomRefreshContainerView: BottomRefreshContainerView = BottomRefreshContainerView(height: height, scrollView: self)
+        addSubview(bottomRefreshContainerView)
+        self.bottomRefreshContainerView = bottomRefreshContainerView
+        self.bottomRefreshContainerView?.actionCallback = actionCallback
+    }
+    
+    public func removeBottomPullToRefresh() -> Void {
+        bottomRefreshContainerView?.removeFromSuperview()
+        bottomRefreshContainerView = nil
+    }
+    
+    public func beginBottomPullToRefresh() -> Void {
+        bottomRefreshContainerView?.beginRefreshing()
+    }
+    
+    public func endBottomPullToRefresh() -> Void {
+        bottomRefreshContainerView?.endRefreshing()
+    }
+    
+    public func endBottomPullToRefreshWithStoppingContentOffset(stopContentOffset: Bool) -> Void {
+        bottomRefreshContainerView?.endRefreshingWithStoppingContentOffset(stopContentOffset)
+    }
+    
+    public func setBottomPullToRefreshEnable(enable: Bool) -> Void {
+        bottomRefreshContainerView?.enable = enable
     }
     
     
+
 }
