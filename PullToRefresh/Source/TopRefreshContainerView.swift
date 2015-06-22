@@ -49,10 +49,12 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             case .Triggered:
                 fallthrough
             case .None:
-                resetScrollViewContentInsetWithCompletion(nil)
+                resetScrollViewContentInsetWithCompletion(nil, animated: scrollToTopAfterEndRefreshing)
             case .Loading:
                 setScrollViewContentInsetForLoadingAnimated(true)
                 if previousState == .Triggered {
+                    previousContentHeight = scrollView.contentSize.height
+                    previousContentOffY = scrollView.contentOffset.y
                     actionCallback?(scrollView: scrollView)
                 }
             }
@@ -61,6 +63,8 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
 
     private var automaticallyTurnOffAdjustsScrollViewInsetsWhenTranslucentNavigationBar: Bool = true
     private var dragToTriggerOffset: CGFloat = DefaultDragToTriggerOffset
+    private var previousContentOffY: CGFloat = 0.0
+    private var previousContentHeight: CGFloat = 0.0
 
     // MARK: Initializers
     
@@ -209,6 +213,8 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
         changeState(.None)
         
         if !scrollToTopAfterEndRefreshing {
+            let nowContentHeight = scrollView.contentSize.height
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, nowContentHeight - previousContentHeight + previousContentOffY)
             return
         }
         

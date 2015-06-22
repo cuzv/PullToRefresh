@@ -170,14 +170,23 @@ public class RefreshContainerView: UIView {
     // MARK: UIScrollView
     
     internal func resetScrollViewContentInsetWithCompletion(completion: ((finished: Bool) -> Void)?) {
-        let options: UIViewAnimationOptions = [.AllowUserInteraction, .BeginFromCurrentState]
-        UIView.animateWithDuration(DefaultResetContentInsetAnimationDuration,
-            delay: 0,
-            options: options,
-            animations: { () -> Void in
-                self.setScrollViewContentInset(self.externalContentInset)
-            },
-            completion: completion)
+        resetScrollViewContentInsetWithCompletion(completion, animated: true)
+    }
+
+    internal func resetScrollViewContentInsetWithCompletion(completion: ((finished: Bool) -> Void)?, animated: Bool) {
+        if animated {
+            let options: UIViewAnimationOptions = [.AllowUserInteraction, .BeginFromCurrentState]
+            UIView.animateWithDuration(DefaultResetContentInsetAnimationDuration,
+                delay: 0,
+                options: options,
+                animations: { () -> Void in
+                    self.setScrollViewContentInset(self.externalContentInset)
+                },
+                completion: completion)
+        } else {
+            setScrollViewContentInset(self.externalContentInset)
+            completion?(finished: true)
+        }
     }
     
     internal func setScrollViewContentInset(inset: UIEdgeInsets) -> Void {

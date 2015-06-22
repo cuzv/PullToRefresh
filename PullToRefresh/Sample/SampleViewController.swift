@@ -45,6 +45,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRectMake(0, 0, 24, 24))
         tableView.topRefreshContainerView?.delegate = topRefreshView
         tableView.topRefreshContainerView?.addSubview(topRefreshView)
+        tableView.topRefreshContainerView?.scrollToTopAfterEndRefreshing = false
         
         // Bottom
         tableView.addBottomRefreshContainerViewWithHeight(60) { [unowned self] (scrollView: UIScrollView) -> Void in
