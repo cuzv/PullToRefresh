@@ -42,8 +42,12 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     
     // MARK: Initializers
     
-    override init(height: CGFloat, scrollView: UIScrollView) {
-        super.init(height: height, scrollView: scrollView)
+    convenience init(height: CGFloat, scrollView: UIScrollView) {
+        self.init(height: height, scrollView: scrollView, pullToRefreshType: .InfiniteScroll)
+    }
+    
+    override init(height: CGFloat, scrollView: UIScrollView, pullToRefreshType: PullToRefreshType) {
+        super.init(height: height, scrollView: scrollView, pullToRefreshType: pullToRefreshType)
         hidden = !shouldShowWhenDisabled
     }
     
@@ -99,11 +103,19 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     }
     
     internal func scrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
+        if pullToRefreshType == .InfiniteScroll {
+            handleInfiniteScrollScrollViewDidScrollToContentOffSet(offSet)
+        } else if pullToRefreshType == .LoosenRefresh {
+            handleLoosenRefreshScrollViewDidScrollToContentOffSet(offSet)
+        }
+    }
+    
+    private func handleInfiniteScrollScrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
         let contentHeight = adjustedHeightFromScrollViewContentSize()
-
+        
         // The lower bound when infinite scroll should kick in
         var actionOffSet = contentHeight - CGRectGetHeight(scrollView.bounds) + scrollView.contentInset.bottom - additionalBottomOffsetForInfinityScrollTrigger
-
+        
         // Prevent conflict with pull to refresh when tableView is too short
         actionOffSet = fmax(actionOffSet, additionalBottomOffsetForInfinityScrollTrigger)
         
@@ -116,6 +128,10 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         }
     }
     
+    private func handleLoosenRefreshScrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
+        
+    }
+    
     // MARK: Refreshing
     
     public func beginRefreshing() -> Void {
@@ -123,13 +139,37 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
             return
         }
         
+        if pullToRefreshType == .InfiniteScroll {
+            beginInfiniteScrollRefreshing()
+        } else if pullToRefreshType == .LoosenRefresh {
+            beginLoosenRefreshRefreshing()
+        }
+    }
+    
+    private func beginInfiniteScrollRefreshing() -> Void {
         if state == .None {
             startInfiniteScroll()
         }
     }
     
+    private func beginLoosenRefreshRefreshing() -> Void {
+    
+    }
+    
     public func endRefreshing() -> Void {
+        if pullToRefreshType == .InfiniteScroll {
+            endInfiniteScrollRefreshing()
+        } else if pullToRefreshType == .LoosenRefresh {
+            endLoosenRefreshRefreshing()
+        }
+    }
+    
+    private func endInfiniteScrollRefreshing() -> Void {
         endRefreshingWithStoppingContentOffset(false)
+    }
+    
+    private func endLoosenRefreshRefreshing() -> Void {
+        
     }
     
     // MARK: - Public
@@ -140,7 +180,7 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         }
     }
     
-    // MARK: - Private
+    // MARK: - Private InfiniteScroll
     
     private func startInfiniteScroll() -> Void {
         hidden = false

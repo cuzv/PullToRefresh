@@ -26,7 +26,7 @@
 
 import UIKit
 
-public class TopRefreshView: UIView, RefreshContainerViewDelegate {
+public class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
     
     private let backCircluarLayer: CAShapeLayer
     private let frontCircluarLayer: CAShapeLayer

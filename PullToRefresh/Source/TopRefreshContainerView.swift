@@ -64,8 +64,12 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
 
     // MARK: Initializers
     
-    override init(height: CGFloat, scrollView: UIScrollView) {
-        super.init(height: height, scrollView: scrollView)
+    override init(height: CGFloat, scrollView: UIScrollView, pullToRefreshType: PullToRefreshType) {
+        super.init(height: height, scrollView: scrollView, pullToRefreshType: pullToRefreshType)
+    }
+    
+    convenience init(height: CGFloat, scrollView: UIScrollView) {
+        self.init(height: height, scrollView: scrollView, pullToRefreshType: .LoosenRefresh)
     }
     
     override init(frame: CGRect) {

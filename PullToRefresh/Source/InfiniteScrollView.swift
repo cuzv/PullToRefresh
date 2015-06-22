@@ -26,7 +26,7 @@
 
 import UIKit
 
-public class BottomRefreshView: UIView {
+public class InfiniteScrollView: UIView {
     public var animating: Bool = true
     private let activityIndicator: UIActivityIndicatorView
     

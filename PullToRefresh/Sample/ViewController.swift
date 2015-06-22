@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         
         view.backgroundColor = UIColor.yellowColor()
         
-        let topRefreshView: TopRefreshView = TopRefreshView(frame: CGRectMake(40, 180, 40, 40))
+        let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRectMake(40, 180, 40, 40))
         view.addSubview(topRefreshView)
     }
 

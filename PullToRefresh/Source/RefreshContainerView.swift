@@ -64,6 +64,11 @@ public let DefaultResetContentInsetAnimationDuration: NSTimeInterval = 0.3
     case Loading
 }
 
+@objc public enum PullToRefreshType: Int {
+    case LoosenRefresh
+    case InfiniteScroll
+}
+
 // MARK: - RefreshContainerViewDelegate
 
 @objc public protocol RefreshContainerViewDelegate {
@@ -116,14 +121,16 @@ public class RefreshContainerView: UIView {
     internal unowned let scrollView: UIScrollView
     internal var externalContentInset: UIEdgeInsets
     internal var updatingScrollViewContentInset: Bool = false
+    internal let pullToRefreshType: PullToRefreshType
     
     private weak var subclass: RefreshContainerViewSubclassDelegate!
     
     // MARK: Initializers
     
-    public init(height: CGFloat, scrollView: UIScrollView) {
+    public init(height: CGFloat, scrollView: UIScrollView, pullToRefreshType: PullToRefreshType) {
         externalContentInset = scrollView.contentInset
         self.scrollView = scrollView
+        self.pullToRefreshType = pullToRefreshType
         
         let frame =  CGRectMake(0, 0, 0, height)
         super.init(frame: frame)

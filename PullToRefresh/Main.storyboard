@@ -59,7 +59,13 @@
                             <constraint firstItem="Pv0-lL-y3q" firstAttribute="leading" secondItem="PYL-wE-66e" secondAttribute="leading" id="z5I-Ti-lqm"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="SampleViewControl" id="OYo-mn-mFN"/>
+                    <navigationItem key="navigationItem" title="SampleViewControl" id="OYo-mn-mFN">
+                        <barButtonItem key="rightBarButtonItem" title="Insert" id="HBK-PZ-L27">
+                            <connections>
+                                <action selector="insert:" destination="jTV-5P-0dH" id="51v-WV-qbq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="Pv0-lL-y3q" id="C00-KP-Ijn"/>
                     </connections>

@@ -42,7 +42,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
         }
         
-        let topRefreshView: TopRefreshView = TopRefreshView(frame: CGRectMake(0, 0, 24, 24))
+        let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRectMake(0, 0, 24, 24))
         tableView.topRefreshContainerView?.delegate = topRefreshView
         tableView.topRefreshContainerView?.addSubview(topRefreshView)
         
@@ -62,8 +62,26 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
         }
 
-        let bottomRefreshView: BottomRefreshView = BottomRefreshView(frame: CGRectMake(0, 0, 24, 24))
+        let bottomRefreshView: InfiniteScrollView = InfiniteScrollView(frame: CGRectMake(0, 0, 24, 24))
         tableView.bottomRefreshContainerView?.addSubview(bottomRefreshView)
+    }
+    
+    // MARK: Actions
+    
+    @IBAction func insert(sender: UIBarButtonItem) {
+        let previousContentOffSetHeight = self.tableView.contentOffset.y
+        let previousContentHeight = self.tableView.contentSize.height
+//            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
+        print("previousContentHeight: \(previousContentHeight)", appendNewline: true)
+        for var i = 0; i < 5; i++ {
+            let data = DataGenerator.generatorSignleRow()
+            self.data.insert(data, atIndex: 0)
+        }
+        self.tableView.reloadData()
+        let nowcontentHeight = self.tableView.contentSize.height
+//            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
+        print("nowcontentHeight: \(nowcontentHeight)", appendNewline: true)
+        self.tableView.contentOffset = CGPointMake(0, nowcontentHeight - previousContentHeight + previousContentOffSetHeight)
     }
     
     // MARK: UITableViewDataSource
