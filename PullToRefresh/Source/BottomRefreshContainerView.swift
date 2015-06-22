@@ -91,8 +91,9 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         
         // Disable infinite scroll when scroll view is empty
         // Default UITableView reports height = 1 on empty tables
-        let hasActualContent = scrollView.contentSize.height > 1
-        if scrollView.dragging && hasActualContent && offSet.y > actionOffSet {
+        let hasActualContent: Bool = scrollView.contentSize.height > 1
+        
+        if scrollView.dragging && hasActualContent && offSet.y > actionOffSet && state == .None {
             startInfiniteScroll()
         }
     }
@@ -134,6 +135,7 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         let adjustedContentHeight = adjustedHeightFromScrollViewContentSize()
         let extraBottomInset = adjustedContentHeight - scrollView.contentSize.height
         
+        // Add empty space padding
         contentInset.bottom += extraBottomInset
         
         // Save extra inset
@@ -181,17 +183,14 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     private func adjustedHeightFromScrollViewContentSize() -> CGFloat {
         let remainingHeight = CGRectGetHeight(bounds) - scrollView.contentInset.top - scrollView.contentInset.bottom
         let contentSizeHeight = scrollView.contentSize.height
-        if contentSizeHeight < remainingHeight {
-            return remainingHeight
-        }
-        
-        return contentSizeHeight
+        return contentSizeHeight < remainingHeight ? remainingHeight : contentSizeHeight
     }
     
     // MARK: - UIScrollView
     
     private func scrollToInfiniteIndicatorIfNeeded() -> Void {
-        if scrollView.dragging && state == .Loading {
+        if !scrollView.dragging && state == .Loading {
+            
             // adjust content height for case when contentSize smaller than view bounds
             let contentHeight = adjustedHeightFromScrollViewContentSize()
             let height = CGRectGetHeight(bounds)
@@ -208,14 +207,4 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
 

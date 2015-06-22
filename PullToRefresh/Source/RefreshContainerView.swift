@@ -51,7 +51,7 @@ public class RefreshContainerView: UIView {
     public var preserveContentInset: Bool = false {
         didSet {
             if bounds.size.height > 0.0 {
-                self.subclass.resetFrame()
+                subclass.resetFrame()
             }
         }
     }
@@ -62,11 +62,11 @@ public class RefreshContainerView: UIView {
                 return
             }
             if enable {
-                self.subclass.resetFrame()
+                subclass.resetFrame()
             } else {
-                self.subclass.endRefreshing()
+                subclass.endRefreshing()
             }
-            self.subclass.didSetEnable(enable)
+            subclass.didSetEnable(enable)
         }
     }
     internal unowned let scrollView: UIScrollView
@@ -84,11 +84,11 @@ public class RefreshContainerView: UIView {
         let frame =  CGRectMake(0, 0, 0, height)
         super.init(frame: frame)
         
-        self.subclass = self as? RefreshContainerViewSubclassDelegate
-        assert(nil != self.subclass, "Self's Subclasses must conformsToProtocol `RefreshContainerViewSubclassDelegate`")
+        subclass = self as? RefreshContainerViewSubclassDelegate
+        assert(nil != subclass, "Self's Subclasses must conformsToProtocol `RefreshContainerViewSubclassDelegate`")
         
         autoresizingMask = .FlexibleWidth
-        self.subclass.resetFrame()
+        subclass.resetFrame()
     }
     
     override init(frame: CGRect) {
@@ -201,10 +201,10 @@ public class RefreshContainerView: UIView {
             guard let offSet = change?[NSKeyValueChangeNewKey]?.CGPointValue else {
                 return
             }
-            self.subclass.scrollViewDidScrollToContentOffSet(offSet)
+            subclass.scrollViewDidScrollToContentOffSet(offSet)
         } else if keyPath == "contentSize" {
             layoutSubviews()
-            self.subclass.resetFrame()
+            subclass.resetFrame()
         } else if keyPath == "frame" {
             layoutSubviews()
         } else if keyPath == "contentInset" {
@@ -212,7 +212,7 @@ public class RefreshContainerView: UIView {
                 guard let contentInset = change?[NSKeyValueChangeNewKey]?.UIEdgeInsetsValue() else {
                     return
                 }
-                self.subclass.observeValueForContentInset(contentInset)
+                subclass.observeValueForContentInset(contentInset)
             }
         }
     }

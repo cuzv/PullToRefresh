@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		461673FA1B37C33E00E9A0B7 /* DataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461673F91B37C33E00E9A0B7 /* DataGenerator.swift */; };
 		46188BAE1B347BD200F6CF2C /* TopRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46188BAD1B347BD200F6CF2C /* TopRefreshView.swift */; };
 		464BE4111B35C9FE0062E131 /* UIView+FirstReponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BE4101B35C9FE0062E131 /* UIView+FirstReponder.swift */; };
 		464BE4131B3669B40062E131 /* CGFloat+Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BE4121B3669B40062E131 /* CGFloat+Convert.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		461673F91B37C33E00E9A0B7 /* DataGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataGenerator.swift; sourceTree = "<group>"; };
 		46188BAD1B347BD200F6CF2C /* TopRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopRefreshView.swift; sourceTree = "<group>"; };
 		464BE4101B35C9FE0062E131 /* UIView+FirstReponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+FirstReponder.swift"; sourceTree = "<group>"; };
 		464BE4121B3669B40062E131 /* CGFloat+Convert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+Convert.swift"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				466AA2091B31B11E00FA13B3 /* AppDelegate.swift */,
 				466AA20B1B31B11E00FA13B3 /* ViewController.swift */,
 				466AA20A1B31B11E00FA13B3 /* SampleViewController.swift */,
+				461673F91B37C33E00E9A0B7 /* DataGenerator.swift */,
 			);
 			path = Sample;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				464BE4111B35C9FE0062E131 /* UIView+FirstReponder.swift in Sources */,
 				466AA2121B31B1AA00FA13B3 /* BottomRefreshContainerView.swift in Sources */,
 				46993B6F1B345ED500D42418 /* UIScrollView+PullToRefresh.swift in Sources */,
+				461673FA1B37C33E00E9A0B7 /* DataGenerator.swift in Sources */,
 				466AA2101B31B19600FA13B3 /* TopRefreshContainerView.swift in Sources */,
 				466AA20E1B31B11E00FA13B3 /* ViewController.swift in Sources */,
 				466AA20D1B31B11E00FA13B3 /* SampleViewController.swift in Sources */,
