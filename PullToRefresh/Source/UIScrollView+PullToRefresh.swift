@@ -71,15 +71,15 @@ public extension UIScrollView {
     }
     
     public func beginToPullToRefresh() -> Void {
-        self.topRefreshContainerView?.beginRefreshing()
+        topRefreshContainerView?.beginRefreshing()
     }
     
     public func endTopPullToRefresh() -> Void {
-        self.topRefreshContainerView?.endRefreshing()
+        topRefreshContainerView?.endRefreshing()
     }
     
     public func setTopPullToRefreshEnable(enable: Bool) -> Void {
-        self.topRefreshContainerView?.enable = enable
+        topRefreshContainerView?.enable = enable
     }
     
     // MARK: - BottomRefreshContainerView

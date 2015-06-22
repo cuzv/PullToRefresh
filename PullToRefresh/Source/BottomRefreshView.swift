@@ -51,10 +51,10 @@ public class BottomRefreshView: UIView {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        guard let selfSuperview = superview else {
+        guard let superview = superview else {
             return
         }
-        center = CGPointMake(CGRectGetMidX(selfSuperview.bounds), CGRectGetMidY(selfSuperview.bounds))
+        center = CGPointMake(CGRectGetMidX(superview.bounds), CGRectGetMidY(superview.bounds))
     }
     
     public override func didMoveToWindow() {

@@ -57,10 +57,10 @@ public class TopRefreshView: UIView, RefreshContainerViewDelegate {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        guard let selfSuperview = superview else {
+        guard let superview = superview else {
             return
         }
-        center = CGPointMake(CGRectGetMidX(selfSuperview.bounds), CGRectGetMidY(selfSuperview.bounds))
+        center = CGPointMake(CGRectGetMidX(superview.bounds), CGRectGetMidY(superview.bounds))
         backCircluarLayer.frame = bounds
         frontCircluarLayer.frame = bounds
     }
@@ -123,7 +123,6 @@ public class TopRefreshView: UIView, RefreshContainerViewDelegate {
     }
 
     private func handleStateChange(state: RefreshContainerViewState) -> Void {
-        print("\(__FUNCTION__)", appendNewline: true)
         if state == .None {
             UIView.animateKeyframesWithDuration(DefaultResetContentInsetAnimationDuration,
                 delay: 0,

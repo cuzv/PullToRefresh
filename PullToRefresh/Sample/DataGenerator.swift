@@ -21,7 +21,7 @@ public class Data {
 public class DataGenerator {
     class func generatorSignleRow() -> Data {
         let height = CGFloat(arc4random() % 100 + 44)
-        let text = "random string with heiht: \(height)"
+        let text = "random string with cell height: \(height)"
         let data = Data(text: text, height: height)
         return data
     }
