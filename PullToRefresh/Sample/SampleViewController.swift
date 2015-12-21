@@ -9,6 +9,10 @@
 import UIKit
 
 class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    deinit {
+        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+    }
+    
     @IBOutlet weak var tableView: UITableView!
     private lazy var data: [Data] = {
         var array: [Data] = []
@@ -25,10 +29,12 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
         tableView.backgroundColor = UIColor(white: 0.97, alpha: 1)
         
+        
         // Top
-        tableView.addTopRefreshContainerViewWithHeight(CGFloat(60.0)) { (scrollView: UIScrollView) -> Void in
+        tableView.addTopRefreshContainerViewWithHeight(CGFloat(60.0)) {
+            [unowned self] (scrollView: UIScrollView) -> Void in
             let time = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * NSEC_PER_SEC))
-            dispatch_after(time, dispatch_get_main_queue(), { [unowned self] () -> Void in
+            dispatch_after(time, dispatch_get_main_queue(), {
 //                let range = Range(start: 0, end: 10)
 //                self.data = Array(self.data[range])
                 
@@ -41,15 +47,16 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 scrollView.endTopPullToRefresh()
             })
         }
-        
+
         let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRectMake(0, 0, 24, 24))
         tableView.topRefreshContainerView?.delegate = topRefreshView
         tableView.topRefreshContainerView?.addSubview(topRefreshView)
-        tableView.topRefreshContainerView?.scrollToTopAfterEndRefreshing = false
+        tableView.topRefreshContainerView?.scrollToTopAfterEndRefreshing = true
         
         // Bottom
-        tableView.addBottomRefreshContainerViewWithHeight(60) { [unowned self] (scrollView: UIScrollView) -> Void in
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+        tableView.addBottomRefreshContainerViewWithHeight(60) {
+            [unowned self] (scrollView: UIScrollView) -> Void in
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
                 for var i = 0; i < 5; i++ {
                     let data = DataGenerator.generatorSignleRow()
                     self.data.append(data)
@@ -73,7 +80,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let previousContentOffSetHeight = self.tableView.contentOffset.y
         let previousContentHeight = self.tableView.contentSize.height
 //            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
-        print("previousContentHeight: \(previousContentHeight)", appendNewline: true)
+        debugPrint("previousContentHeight: \(previousContentHeight)")
         for var i = 0; i < 5; i++ {
             let data = DataGenerator.generatorSignleRow()
             self.data.insert(data, atIndex: 0)
@@ -81,7 +88,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.reloadData()
         let nowcontentHeight = self.tableView.contentSize.height
 //            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
-        print("nowcontentHeight: \(nowcontentHeight)", appendNewline: true)
+        debugPrint("nowcontentHeight: \(nowcontentHeight)")
         self.tableView.contentOffset = CGPointMake(0, nowcontentHeight - previousContentHeight + previousContentOffSetHeight)
     }
     

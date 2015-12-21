@@ -150,11 +150,9 @@ public class RefreshContainerView: UIView {
         fatalError("init(coder:) has not been implemented, use init(height:scrollView)")
     }
 
-    #if DEBUG
     deinit {
-        print("\(__FILE__):\(__LINE__):\(__FUNCTION__)", appendNewline: true)
+        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
     }
-    #endif
     
     // MARK: - Internal
     
@@ -249,13 +247,13 @@ public class RefreshContainerView: UIView {
         view.addObserver(self, forKeyPath: "contentInset", options: NSKeyValueObservingOptions.New, context: nil)
     }
     
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if !enable {
             return
         }
         
 //        let value = change?[NSKeyValueChangeNewKey]
-//        print("\(keyPath): \(value)", appendNewline: true)
+//        debugPrint("\(keyPath): \(value)")
         
         if keyPath == "contentOffset" {
             guard let offSet = change?[NSKeyValueChangeNewKey]?.CGPointValue else {

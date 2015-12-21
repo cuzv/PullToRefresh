@@ -34,9 +34,9 @@ public extension UIScrollView {
     
     public var topRefreshContainerView: TopRefreshContainerView? {
         set {
-            willChangeValueForKey("topRefreshContainerView")
-            objc_setAssociatedObject(self, &AssociatedKeys.topRefreshContainerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
-            didChangeValueForKey("topRefreshContainerView")
+            willChangeValueForKey(AssociatedKeys.topRefreshContainerKey)
+            objc_setAssociatedObject(self, &AssociatedKeys.topRefreshContainerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            didChangeValueForKey(AssociatedKeys.topRefreshContainerKey)
         }
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.topRefreshContainerKey) as? TopRefreshContainerView
@@ -45,17 +45,19 @@ public extension UIScrollView {
     
     public var bottomRefreshContainerView: BottomRefreshContainerView? {
         set {
-            willChangeValueForKey("bottomRefreshContainerView")
-            objc_setAssociatedObject(self, &AssociatedKeys.bottomRefreshContainerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
-            didChangeValueForKey("bottomRefreshContainerView")
+            willChangeValueForKey(AssociatedKeys.bottomRefreshContainerKey)
+            objc_setAssociatedObject(self, &AssociatedKeys.bottomRefreshContainerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            didChangeValueForKey(AssociatedKeys.bottomRefreshContainerKey)
         }
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.bottomRefreshContainerKey) as? BottomRefreshContainerView
         }
     }
-    
-    // MARK: - TopRefreshContainerView
-    
+}
+
+// MARK: - TopRefreshContainerView
+
+public extension UIScrollView {
     public func addTopRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
         removeTopPullToRefresh()
         
@@ -81,9 +83,11 @@ public extension UIScrollView {
     public func setTopPullToRefreshEnable(enable: Bool) -> Void {
         topRefreshContainerView?.enable = enable
     }
-    
-    // MARK: - BottomRefreshContainerView
-    
+}
+
+// MARK: - BottomRefreshContainerView
+
+public extension UIScrollView {
     public func addBottomRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
         removeBottomPullToRefresh()
         

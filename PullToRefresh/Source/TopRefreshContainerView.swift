@@ -84,12 +84,10 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
         fatalError("init(coder:) has not been implemented, use init(height:scrollView)")
     }
     
-    #if DEBUG
     deinit {
-        print("\(__FILE__):\(__LINE__):\(__FUNCTION__)", appendNewline: true)
+        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
     }
-    #endif
-    
+
     // MARK: - Public override
     
     override public func didMoveToSuperview() {

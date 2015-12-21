@@ -59,12 +59,9 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         fatalError("init(coder:) has not been implemented, use init(height:scrollView)")
     }
     
-    #if DEBUG
     deinit {
-        print("\(__FILE__):\(__LINE__):\(__FUNCTION__)", appendNewline: true)
+        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
     }
-    #endif
-
 
     // MARK: - RefreshContainerViewSubclassDelegate
     
@@ -153,7 +150,7 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     }
     
     private func beginLoosenRefreshRefreshing() -> Void {
-    
+        // TODO:
     }
     
     public func endRefreshing() -> Void {
@@ -169,7 +166,7 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     }
     
     private func endLoosenRefreshRefreshing() -> Void {
-        
+        // TODO:
     }
     
     // MARK: - Public
@@ -209,7 +206,7 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         
         // This will delay handler execution until scroll deceleration
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC)), dispatch_get_main_queue()) { () -> Void in
-            actionCallback?(scrollView: scrollView)
+            self.actionCallback?(scrollView: self.scrollView)
         }
     }
     

@@ -42,11 +42,9 @@ public class InfiniteScrollView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    #if DEBUG
     deinit {
-        print("\(__FILE__):\(__LINE__):\(__FUNCTION__)", appendNewline: true)
+        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
     }
-    #endif
     
     override public func layoutSubviews() {
         super.layoutSubviews()
