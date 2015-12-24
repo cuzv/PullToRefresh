@@ -28,10 +28,10 @@ import UIKit
 
 public extension CGFloat {
     public func convertAngleToRadian() -> CGFloat {
-        return CGFloat(self.native * M_PI / 180.0)
+        return CGFloat(Double(native / 180.0) * M_PI)
     }
     
     public func convertRadianToAngle() -> CGFloat {
-        return CGFloat(self.native * 180.0 / M_PI)
+        return CGFloat(Double(native * 180.0) / M_PI)
     }
 }

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "C2629B4E92C0EDB6A28968C6B5F5B083E3BD4FE5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C2629B4E92C0EDB6A28968C6B5F5B083E3BD4FE5" : 0,
+    "96DFDEE0CAB6CC188C16A4AB8E6AF3F833CBAD1F" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "BA48BDD9-3517-40DD-8FA1-BE5E22D75A2B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C2629B4E92C0EDB6A28968C6B5F5B083E3BD4FE5" : "PullToRefresh\/",
+    "96DFDEE0CAB6CC188C16A4AB8E6AF3F833CBAD1F" : "..\/.."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PullToRefresh",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PullToRefresh.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "123.56.136.184:iOS\/microshop.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "96DFDEE0CAB6CC188C16A4AB8E6AF3F833CBAD1F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/cuzv\/PullToRefresh",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C2629B4E92C0EDB6A28968C6B5F5B083E3BD4FE5"
+    }
+  ]
+}
