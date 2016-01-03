@@ -32,6 +32,6 @@ public extension CGFloat {
     }
     
     public func convertRadianToAngle() -> CGFloat {
-        return CGFloat(Double(native * 180.0) / M_PI)
+        return CGFloat(Double(native / M_PI) * 180.0)
     }
 }
