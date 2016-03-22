@@ -58,10 +58,6 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented, use init(height:scrollView)")
     }
-    
-    deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
-    }
 
     // MARK: - RefreshContainerViewSubclassDelegate
     
@@ -261,5 +257,11 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
             }
         }
     }
+    
+    #if DEBUG
+    deinit {
+        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+    }
+    #endif
 }
 

@@ -48,9 +48,11 @@ public class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    #if DEBUG
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
     }
+    #endif
     
     override public func layoutSubviews() {
         super.layoutSubviews()

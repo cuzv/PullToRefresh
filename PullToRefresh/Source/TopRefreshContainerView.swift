@@ -84,9 +84,11 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
         fatalError("init(coder:) has not been implemented, use init(height:scrollView)")
     }
     
+    #if DEBUG
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
     }
+    #endif
 
     // MARK: - Public override
     
