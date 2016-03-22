@@ -99,7 +99,7 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             return
         }
         
-        guard let firstReponderViewController = firstResponderViewController() else {
+        guard let firstReponderViewController = firstResponderViewController else {
             return
         }
         
