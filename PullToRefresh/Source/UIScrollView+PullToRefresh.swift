@@ -59,8 +59,6 @@ public extension UIScrollView {
 
 public extension UIScrollView {
     public func addTopRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
-        removeTopPullToRefresh()
-        
         let topRefreshContainerView: TopRefreshContainerView = TopRefreshContainerView(height: height, scrollView: self)
         addSubview(topRefreshContainerView)
         self.topRefreshContainerView = topRefreshContainerView
@@ -68,6 +66,7 @@ public extension UIScrollView {
     }
     
     public func removeTopPullToRefresh() -> Void {
+        endTopPullToRefresh()
         topRefreshContainerView?.removeFromSuperview()
         topRefreshContainerView = nil
     }
@@ -88,9 +87,7 @@ public extension UIScrollView {
 // MARK: - BottomRefreshContainerView
 
 public extension UIScrollView {
-    public func addBottomRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
-        removeBottomPullToRefresh()
-        
+    public func addBottomRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {        
         let bottomRefreshContainerView: BottomRefreshContainerView = BottomRefreshContainerView(height: height, scrollView: self)
         addSubview(bottomRefreshContainerView)
         self.bottomRefreshContainerView = bottomRefreshContainerView
@@ -98,6 +95,7 @@ public extension UIScrollView {
     }
     
     public func removeBottomPullToRefresh() -> Void {
+        endBottomPullToRefresh()
         bottomRefreshContainerView?.removeFromSuperview()
         bottomRefreshContainerView = nil
     }
