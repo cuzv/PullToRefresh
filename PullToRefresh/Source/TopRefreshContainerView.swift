@@ -109,13 +109,19 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
         
         if navigationBar.translucent &&
             firstReponderViewController.automaticallyAdjustsScrollViewInsets &&
-            scrollView.superview == firstReponderViewController.view {
-                firstReponderViewController.automaticallyAdjustsScrollViewInsets = false
-                scrollView.contentInset = UIEdgeInsetsMake(navigationBar.frame.origin.y + navigationBar.bounds.size.height,
-                    scrollView.contentInset.left,
-                    scrollView.contentInset.bottom,
-                    scrollView.contentInset.right);
-                scrollView.scrollIndicatorInsets = scrollView.contentInset;
+            scrollView.superview == firstReponderViewController.view
+        {
+            firstReponderViewController.automaticallyAdjustsScrollViewInsets = false
+            var bottomAddition: CGFloat = 0
+            if let tabBar = firstReponderViewController.tabBarController?.tabBar where nil != tabBar.window {
+                bottomAddition = CGRectGetHeight(tabBar.bounds)
+            }
+            scrollView.contentInset = UIEdgeInsetsMake(
+                CGRectGetMinY(navigationBar.frame) + CGRectGetHeight(navigationBar.frame),
+                scrollView.contentInset.left,
+                scrollView.contentInset.bottom + bottomAddition,
+                scrollView.contentInset.right);
+            scrollView.scrollIndicatorInsets = scrollView.contentInset;
         }
     }
     
