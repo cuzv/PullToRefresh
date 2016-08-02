@@ -113,11 +113,11 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
         {
             firstReponderViewController.automaticallyAdjustsScrollViewInsets = false
             var bottomAddition: CGFloat = 0
-            if let tabBar = firstReponderViewController.tabBarController?.tabBar where nil != tabBar.window {
+            if let tabBar = firstReponderViewController.tabBarController?.tabBar where !tabBar.hidden {
                 bottomAddition = CGRectGetHeight(tabBar.bounds)
             }
             scrollView.contentInset = UIEdgeInsetsMake(
-                CGRectGetMinY(navigationBar.frame) + CGRectGetHeight(navigationBar.frame),
+                CGRectGetMaxY(navigationBar.frame),
                 scrollView.contentInset.left,
                 scrollView.contentInset.bottom + bottomAddition,
                 scrollView.contentInset.right);
