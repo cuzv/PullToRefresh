@@ -117,7 +117,7 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
                 bottomAddition = CGRectGetHeight(tabBar.bounds)
             }
             scrollView.contentInset = UIEdgeInsetsMake(
-                CGRectGetMaxY(navigationBar.frame),
+                scrollView.contentInset.top + CGRectGetMaxY(navigationBar.frame),
                 scrollView.contentInset.left,
                 scrollView.contentInset.bottom + bottomAddition,
                 scrollView.contentInset.right);
