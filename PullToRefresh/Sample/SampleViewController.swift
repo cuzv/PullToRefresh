@@ -10,13 +10,13 @@ import UIKit
 
 class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(#function)")
     }
     
     @IBOutlet weak var tableView: UITableView!
     private lazy var data: [Data] = {
         var array: [Data] = []
-        for var i = 0; i < 10; i++ {
+        for i in 0 ..< 10 {
             let data = DataGenerator.generatorSignleRow()
             array.append(data)
         }
@@ -38,7 +38,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
 //                let range = Range(start: 0, end: 10)
 //                self.data = Array(self.data[range])
                 
-                for var i = 0; i < 5; i++ {
+                for _ in 0 ..< 5 {
                     let data = DataGenerator.generatorSignleRow()
                     self.data.insert(data, atIndex: 0)
                 }
@@ -57,7 +57,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.addBottomRefreshContainerViewWithHeight(60) {
             [unowned self] (scrollView: UIScrollView) -> Void in
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                for var i = 0; i < 5; i++ {
+                for _ in 0 ..< 5 {
                     let data = DataGenerator.generatorSignleRow()
                     self.data.append(data)
                 }
@@ -81,7 +81,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let previousContentHeight = self.tableView.contentSize.height
 //            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
         debugPrint("previousContentHeight: \(previousContentHeight)")
-        for var i = 0; i < 5; i++ {
+        for _ in 0 ..< 5 {
             let data = DataGenerator.generatorSignleRow()
             self.data.insert(data, atIndex: 0)
         }

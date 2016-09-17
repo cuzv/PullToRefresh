@@ -49,7 +49,7 @@ public class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
     }
     
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(#function)")
     }
     
     override public func layoutSubviews() {

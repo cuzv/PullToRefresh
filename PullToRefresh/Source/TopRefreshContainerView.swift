@@ -85,7 +85,7 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     }
     
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(#function)")
     }
 
     // MARK: - Public override
