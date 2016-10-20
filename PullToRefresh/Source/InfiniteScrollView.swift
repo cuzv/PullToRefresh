@@ -26,9 +26,9 @@
 
 import UIKit
 
-public class InfiniteScrollView: UIView {
-    public var animating: Bool = true
-    private let activityIndicator: UIActivityIndicatorView
+open class InfiniteScrollView: UIView {
+    open var animating: Bool = true
+    fileprivate let activityIndicator: UIActivityIndicatorView
     
     override init(frame: CGRect) {
         activityIndicator = UIActivityIndicatorView()
@@ -44,42 +44,42 @@ public class InfiniteScrollView: UIView {
     
     #if DEBUG
     deinit {
-        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+        debugPrint("\(#file):\(#line):\(type(of: self)):\(#function)")
     }
     #endif
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         guard let superview = superview else {
             return
         }
-        center = CGPointMake(CGRectGetMidX(superview.bounds), CGRectGetMidY(superview.bounds))
+        center = CGPoint(x: superview.bounds.midX, y: superview.bounds.midY)
     }
     
-    public override func didMoveToWindow() {
-        if let _ = window where animating {
+    open override func didMoveToWindow() {
+        if let _ = window , animating {
             startAnimating()
         }
     }
     
-    private func setupActivityIndicator() -> Void {
+    fileprivate func setupActivityIndicator() -> Void {
         activityIndicator.frame = bounds
-        activityIndicator.activityIndicatorViewStyle = .Gray
-        activityIndicator.hidden = true
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.isHidden = true
         addSubview(activityIndicator)
     }
 
-    public func startAnimating() -> Void {
+    open func startAnimating() -> Void {
         activityIndicator.startAnimating()
-        activityIndicator.hidden = false
+        activityIndicator.isHidden = false
         
         animating = true
     }
     
-    public func stopAnimating() -> Void {
+    open func stopAnimating() -> Void {
         activityIndicator.stopAnimating()
-        activityIndicator.hidden = true
+        activityIndicator.isHidden = true
         
         animating = false
     }

@@ -26,16 +26,16 @@
 
 import UIKit
 
-public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerViewSubclassDelegate {
+open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerViewSubclassDelegate {
 
-    public var additionalBottomOffsetForInfinityScrollTrigger: CGFloat = 0.0
-    private var infiniteScrollBottomContentInset: CGFloat = 0.0
-    private var shouldShowWhenDisabled: Bool = false {
+    open var additionalBottomOffsetForInfinityScrollTrigger: CGFloat = 0.0
+    fileprivate var infiniteScrollBottomContentInset: CGFloat = 0.0
+    fileprivate var shouldShowWhenDisabled: Bool = false {
         didSet {
             if shouldShowWhenDisabled {
-                hidden = false
+                isHidden = false
             } else {
-                hidden = state == .None
+                isHidden = state == .none
             }
         }
     }
@@ -43,12 +43,12 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     // MARK: Initializers
     
     convenience init(height: CGFloat, scrollView: UIScrollView) {
-        self.init(height: height, scrollView: scrollView, pullToRefreshType: .InfiniteScroll)
+        self.init(height: height, scrollView: scrollView, pullToRefreshType: .infiniteScroll)
     }
     
     override init(height: CGFloat, scrollView: UIScrollView, pullToRefreshType: PullToRefreshType) {
         super.init(height: height, scrollView: scrollView, pullToRefreshType: pullToRefreshType)
-        hidden = !shouldShowWhenDisabled
+        isHidden = !shouldShowWhenDisabled
     }
     
     override init(frame: CGRect) {
@@ -62,25 +62,25 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
     // MARK: - RefreshContainerViewSubclassDelegate
     
     internal func resetFrame() -> Void {
-        let height = CGRectGetHeight(bounds)
-        let width = CGRectGetWidth(scrollView.bounds)
+        let height = bounds.height
+        let width = scrollView.bounds.width
         let contentHeight = adjustedHeightFromScrollViewContentSize()
-        var newFrame = CGRectMake(-externalContentInset.left, contentHeight, width, height)
+        var newFrame = CGRect(x: -externalContentInset.left, y: contentHeight, width: width, height: height)
         if preserveContentInset {
-            newFrame = CGRectMake(0.0, contentHeight + externalContentInset.bottom, width, height)
+            newFrame = CGRect(x: 0.0, y: contentHeight + externalContentInset.bottom, width: width, height: height)
         }
         frame = newFrame
     }
     
-    internal func didSetEnable(enable: Bool) {
+    internal func didSetEnable(_ enable: Bool) {
         if !shouldShowWhenDisabled {
-            hidden = !enable
+            isHidden = !enable
         }
     }
     
     // MARK: Observing
 
-    internal func observeValueForContentInset(inset: UIEdgeInsets) -> Void {
+    internal func observeValue(forContentInset inset: UIEdgeInsets) -> Void {
         let doSomething: () -> Void = {
             self.externalContentInset = inset
             self.resetFrame()
@@ -90,24 +90,24 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
             doSomething()
             return
         }
-        if topRefreshContainerView.state == .None {
+        if topRefreshContainerView.state == .none {
             doSomething()
         }
     }
     
-    internal func scrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
-        if pullToRefreshType == .InfiniteScroll {
+    internal func scrollViewDidScroll(toContentOffSet offSet: CGPoint) -> Void {
+        if pullToRefreshType == .infiniteScroll {
             handleInfiniteScrollScrollViewDidScrollToContentOffSet(offSet)
-        } else if pullToRefreshType == .LoosenRefresh {
+        } else if pullToRefreshType == .loosenRefresh {
             handleLoosenRefreshScrollViewDidScrollToContentOffSet(offSet)
         }
     }
     
-    private func handleInfiniteScrollScrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
+    fileprivate func handleInfiniteScrollScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
         let contentHeight = adjustedHeightFromScrollViewContentSize()
         
         // The lower bound when infinite scroll should kick in
-        var actionOffSet = contentHeight - CGRectGetHeight(scrollView.bounds) + scrollView.contentInset.bottom - additionalBottomOffsetForInfinityScrollTrigger
+        var actionOffSet = contentHeight - scrollView.bounds.height + scrollView.contentInset.bottom - additionalBottomOffsetForInfinityScrollTrigger
         
         // Prevent conflict with pull to refresh when tableView is too short
         actionOffSet = fmax(actionOffSet, additionalBottomOffsetForInfinityScrollTrigger)
@@ -116,70 +116,70 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         // Default UITableView reports height = 1 on empty tables
         let hasActualContent: Bool = scrollView.contentSize.height > 1
         
-        if scrollView.dragging && hasActualContent && offSet.y > actionOffSet && state == .None {
+        if scrollView.isDragging && hasActualContent && offSet.y > actionOffSet && state == .none {
             startInfiniteScroll()
         }
     }
     
-    private func handleLoosenRefreshScrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
+    fileprivate func handleLoosenRefreshScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
         
     }
     
     // MARK: Refreshing
     
-    public func beginRefreshing() -> Void {
+    open func beginRefreshing() -> Void {
         if !enable {
             return
         }
         
-        if pullToRefreshType == .InfiniteScroll {
+        if pullToRefreshType == .infiniteScroll {
             beginInfiniteScrollRefreshing()
-        } else if pullToRefreshType == .LoosenRefresh {
+        } else if pullToRefreshType == .loosenRefresh {
             beginLoosenRefreshRefreshing()
         }
     }
     
-    private func beginInfiniteScrollRefreshing() -> Void {
-        if state == .None {
+    fileprivate func beginInfiniteScrollRefreshing() -> Void {
+        if state == .none {
             startInfiniteScroll()
         }
     }
     
-    private func beginLoosenRefreshRefreshing() -> Void {
+    fileprivate func beginLoosenRefreshRefreshing() -> Void {
         // TODO:
     }
     
-    public func endRefreshing() -> Void {
-        if pullToRefreshType == .InfiniteScroll {
+    open func endRefreshing() -> Void {
+        if pullToRefreshType == .infiniteScroll {
             endInfiniteScrollRefreshing()
-        } else if pullToRefreshType == .LoosenRefresh {
+        } else if pullToRefreshType == .loosenRefresh {
             endLoosenRefreshRefreshing()
         }
     }
     
-    private func endInfiniteScrollRefreshing() -> Void {
+    fileprivate func endInfiniteScrollRefreshing() -> Void {
         endRefreshingWithStoppingContentOffset(false)
     }
     
-    private func endLoosenRefreshRefreshing() -> Void {
+    fileprivate func endLoosenRefreshRefreshing() -> Void {
         // TODO:
     }
     
     // MARK: - Public
     
-    public func endRefreshingWithStoppingContentOffset(stopContentOffset: Bool) -> Void {
-        if state == .Loading {
+    open func endRefreshingWithStoppingContentOffset(_ stopContentOffset: Bool) -> Void {
+        if state == .loading {
             stopInfiniteScrollWithStoppingContentOffset(stopContentOffset)
         }
     }
     
     // MARK: - Private InfiniteScroll
     
-    private func startInfiniteScroll() -> Void {
-        hidden = false
+    fileprivate func startInfiniteScroll() -> Void {
+        isHidden = false
         
         var contentInset = scrollView.contentInset
-        contentInset.bottom += CGRectGetHeight(bounds)
+        contentInset.bottom += bounds.height
         
         // We have to pad scroll view when content height is smaller than view bounds.
         // This will guarantee that view appears at the very bottom of scroll view.
@@ -192,23 +192,23 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
         // Save extra inset
         infiniteScrollBottomContentInset = extraBottomInset
         
-        changeState(.Loading)
+        changeState(.loading)
         
         setScrollViewContentInset(contentInset, forLoadingAnimated: true) { [weak self] (finished: Bool) -> Void in
-            if let strongSelf = self where finished {
+            if let strongSelf = self , finished {
                 strongSelf.scrollToInfiniteIndicatorIfNeeded()
             }
         }
         
         // This will delay handler execution until scroll deceleration
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC)), dispatch_get_main_queue()) { () -> Void in
-            self.actionCallback?(scrollView: self.scrollView)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(100 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) { () -> Void in
+            self.actionHandler?(self.scrollView)
         }
     }
     
-    private func stopInfiniteScrollWithStoppingContentOffset(stopContentOffset: Bool) -> Void {
+    fileprivate func stopInfiniteScrollWithStoppingContentOffset(_ stopContentOffset: Bool) -> Void {
         var contentInset = scrollView.contentInset
-        contentInset.bottom -= CGRectGetHeight(bounds)
+        contentInset.bottom -= bounds.height
         
         // remove extra inset added to pad infinite scroll
         contentInset.bottom -= infiniteScrollBottomContentInset
@@ -221,46 +221,46 @@ public class BottomRefreshContainerView: RefreshContainerView, RefreshContainerV
                 }
                 if finished {
                     if !strongSelf.shouldShowWhenDisabled {
-                        strongSelf.hidden = true
+                        strongSelf.isHidden = true
                     }
                     strongSelf.resetScrollViewContentInsetWithCompletion({ (finished) -> Void in
-                        strongSelf.changeState(.None)
+                        strongSelf.changeState(.none)
                     })
                 }
             }
         }
     }
     
-    private func adjustedHeightFromScrollViewContentSize() -> CGFloat {
-        let remainingHeight = CGRectGetHeight(bounds) - scrollView.contentInset.top - scrollView.contentInset.bottom
+    fileprivate func adjustedHeightFromScrollViewContentSize() -> CGFloat {
+        let remainingHeight = bounds.height - scrollView.contentInset.top - scrollView.contentInset.bottom
         let contentSizeHeight = scrollView.contentSize.height
         return contentSizeHeight < remainingHeight ? remainingHeight : contentSizeHeight
     }
     
     // MARK: - UIScrollView
     
-    private func scrollToInfiniteIndicatorIfNeeded() -> Void {
-        if !scrollView.dragging && state == .Loading {
+    fileprivate func scrollToInfiniteIndicatorIfNeeded() -> Void {
+        if !scrollView.isDragging && state == .loading {
             
             // adjust content height for case when contentSize smaller than view bounds
             let contentHeight = adjustedHeightFromScrollViewContentSize()
-            let height = CGRectGetHeight(bounds)
+            let height = bounds.height
             
             let bottomBarHeight = scrollView.contentInset.bottom - height
-            let minY = contentHeight - CGRectGetHeight(scrollView.bounds) + bottomBarHeight
+            let minY = contentHeight - scrollView.bounds.height + bottomBarHeight
             let maxY = minY + height
             
             let contentOffsetY = scrollView.contentOffset.y
             
             if minY < contentOffsetY && contentOffsetY < maxY {
-                scrollView.setContentOffset(CGPointMake(0, maxY), animated: true)
+                scrollView.setContentOffset(CGPoint(x: 0, y: maxY), animated: true)
             }
         }
     }
     
     #if DEBUG
     deinit {
-        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+        debugPrint("\(#file):\(#line):\(type(of: self)):\(#function)")
     }
     #endif
 }

@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class Data {
-    public let text: String
-    public let height: CGFloat
+open class Data {
+    open let text: String
+    open let height: CGFloat
     
     init(text: String, height: CGFloat) {
         self.text = text
@@ -18,7 +18,7 @@ public class Data {
     }
 }
 
-public class DataGenerator {
+open class DataGenerator {
     class func generatorSignleRow() -> Data {
         let height = CGFloat(arc4random() % 100 + 44)
         let text = "random string with cell height: \(height)"

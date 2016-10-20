@@ -32,10 +32,10 @@ public let DefaultDragToTriggerOffset: CGFloat = 80.0
 
 // MARK: - TopRefreshContainerView
 
-public class TopRefreshContainerView: RefreshContainerView, RefreshContainerViewSubclassDelegate {
+open class TopRefreshContainerView: RefreshContainerView, RefreshContainerViewSubclassDelegate {
 
-    public var scrollToTopAfterEndRefreshing: Bool = true
-    override public var state: RefreshContainerViewState {
+    open var scrollToTopAfterEndRefreshing: Bool = true
+    override open var state: RefreshContainerViewState {
         didSet {
             let previousState: RefreshContainerViewState = oldValue
             if state == previousState {
@@ -46,25 +46,25 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             layoutIfNeeded()
             
             switch state {
-            case .Triggered:
+            case .triggered:
                 fallthrough
-            case .None:
+            case .none:
                 resetScrollViewContentInsetWithCompletion(nil, animated: scrollToTopAfterEndRefreshing)
-            case .Loading:
+            case .loading:
                 setScrollViewContentInsetForLoadingAnimated(true)
-                if previousState == .Triggered {
+                if previousState == .triggered {
                     previousContentHeight = scrollView.contentSize.height
                     previousContentOffY = scrollView.contentOffset.y
-                    actionCallback?(scrollView: scrollView)
+                    actionHandler?(scrollView)
                 }
             }
         }
     }
 
-    private var automaticallyTurnOffAdjustsScrollViewInsetsWhenTranslucentNavigationBar: Bool = true
-    private var dragToTriggerOffset: CGFloat = DefaultDragToTriggerOffset
-    private var previousContentOffY: CGFloat = 0.0
-    private var previousContentHeight: CGFloat = 0.0
+    fileprivate var automaticallyTurnOffAdjustsScrollViewInsetsWhenTranslucentNavigationBar: Bool = true
+    fileprivate var dragToTriggerOffset: CGFloat = DefaultDragToTriggerOffset
+    fileprivate var previousContentOffY: CGFloat = 0.0
+    fileprivate var previousContentHeight: CGFloat = 0.0
 
     // MARK: Initializers
     
@@ -73,7 +73,7 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     }
     
     convenience init(height: CGFloat, scrollView: UIScrollView) {
-        self.init(height: height, scrollView: scrollView, pullToRefreshType: .LoosenRefresh)
+        self.init(height: height, scrollView: scrollView, pullToRefreshType: .loosenRefresh)
     }
     
     override init(frame: CGRect) {
@@ -86,13 +86,13 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     
     #if DEBUG
     deinit {
-        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+        debugPrint("\(#file):\(#line):\(type(of: self)):\(#function)")
     }
     #endif
 
     // MARK: - Public override
     
-    override public func didMoveToSuperview() {
+    override open func didMoveToSuperview() {
         super.didMoveToSuperview()
         
         if !automaticallyTurnOffAdjustsScrollViewInsetsWhenTranslucentNavigationBar {
@@ -107,17 +107,17 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             return
         }
         
-        if navigationBar.translucent &&
+        if navigationBar.isTranslucent &&
             firstReponderViewController.automaticallyAdjustsScrollViewInsets &&
             scrollView.superview == firstReponderViewController.view
         {
             firstReponderViewController.automaticallyAdjustsScrollViewInsets = false
             var bottomAddition: CGFloat = 0
-            if let tabBar = firstReponderViewController.tabBarController?.tabBar where !tabBar.hidden {
-                bottomAddition = CGRectGetHeight(tabBar.bounds)
+            if let tabBar = firstReponderViewController.tabBarController?.tabBar , !tabBar.isHidden {
+                bottomAddition = tabBar.bounds.height
             }
             scrollView.contentInset = UIEdgeInsetsMake(
-                scrollView.contentInset.top + CGRectGetMaxY(navigationBar.frame),
+                scrollView.contentInset.top + navigationBar.frame.maxY,
                 scrollView.contentInset.left,
                 scrollView.contentInset.bottom + bottomAddition,
                 scrollView.contentInset.right);
@@ -128,23 +128,23 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     // MARK: - RefreshContainerViewSubclassDelegate
     
     internal func resetFrame() -> Void {
-        let height = CGRectGetHeight(bounds)
-        let width = CGRectGetWidth(scrollView.bounds)
-        var newFrame = CGRectMake(-externalContentInset.left, -height, width, height)
+        let height = bounds.height
+        let width = scrollView.bounds.width
+        var newFrame = CGRect(x: -externalContentInset.left, y: -height, width: width, height: height)
         if preserveContentInset {
-            newFrame = CGRectMake(0.0, -height - externalContentInset.top, width, height)
+            newFrame = CGRect(x: 0.0, y: -height - externalContentInset.top, width: width, height: height)
         }
         
         frame = newFrame
     }
     
-    internal func didSetEnable(enable: Bool) {
-        hidden = !enable
+    internal func didSetEnable(_ enable: Bool) {
+        isHidden = !enable
     }
     
     // MARK: Observing
     
-    internal func observeValueForContentInset(inset: UIEdgeInsets) -> Void {
+    internal func observeValue(forContentInset inset: UIEdgeInsets) -> Void {
         let doSomething: () -> Void = {
             self.externalContentInset = inset
             self.resetFrame()
@@ -154,18 +154,18 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             doSomething()
             return
         }
-        if bottomRefreshContainerView.state == .None {
+        if bottomRefreshContainerView.state == .none {
             doSomething()
         }
     }
     
-    internal func scrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void {
-        if state == .Loading {
+    internal func scrollViewDidScroll(toContentOffSet offSet: CGPoint) -> Void {
+        if state == .loading {
             var loadingInset = externalContentInset
-            var top = loadingInset.top + CGRectGetHeight(bounds)
+            var top = loadingInset.top + bounds.height
             
             if isScrollViewIsTableViewAndHaveSections() &&
-                scrollView.contentOffset.y > -CGRectGetHeight(bounds) {
+                scrollView.contentOffset.y > -bounds.height {
                     if scrollView.contentOffset.y >= 0 {
                         top = loadingInset.top
                     } else {
@@ -176,15 +176,15 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
             setScrollViewContentInset(loadingInset, forLoadingAnimated: false)
         } else {
             let dragging = -offSet.y - externalContentInset.top
-            if !scrollView.dragging && state == .Triggered {
-                changeState(.Loading)
-            } else if dragging >= dragToTriggerOffset && scrollView.dragging && state == .None {
-                changeState(.Triggered)
-            } else if dragging < dragToTriggerOffset && state != .None {
-                changeState(.None)
+            if !scrollView.isDragging && state == .triggered {
+                changeState(.loading)
+            } else if dragging >= dragToTriggerOffset && scrollView.isDragging && state == .none {
+                changeState(.triggered)
+            } else if dragging < dragToTriggerOffset && state != .none {
+                changeState(.none)
             }
             
-            if dragging >= 0 && state != .Loading {
+            if dragging >= 0 && state != .loading {
                 var progress: CGFloat = dragging * 1.0 / dragToTriggerOffset * 1.0
                 if progress > 1.0 {
                     progress = 1.0
@@ -196,43 +196,43 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     
     // MARK: Refreshing
     
-    public func beginRefreshing() -> Void {
+    open func beginRefreshing() -> Void {
         if !enable {
             return
         }
-        if state != .None {
+        if state != .none {
             return
         }
         
-        changeState(.Triggered)
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.scrollView.setContentOffset(CGPointMake(self.scrollView.contentOffset.x, -CGRectGetHeight(self.frame) - self.externalContentInset.top), animated: true)
+        changeState(.triggered)
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.scrollView.setContentOffset(CGPoint(x: self.scrollView.contentOffset.x, y: -self.frame.height - self.externalContentInset.top), animated: true)
         })
-        changeState(.Loading)
+        changeState(.loading)
     }
     
-    public func endRefreshing() -> Void {
-        if state == .None {
+    open func endRefreshing() -> Void {
+        if state == .none {
             return
         }
         
-        changeState(.None)
+        changeState(.none)
         
         if !scrollToTopAfterEndRefreshing {
             let nowContentHeight = scrollView.contentSize.height
-            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, nowContentHeight - previousContentHeight + previousContentOffY)
+            scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: nowContentHeight - previousContentHeight + previousContentOffY)
             return
         }
         
-        let originalContentOffset = CGPointMake(-externalContentInset.left, -externalContentInset.top)
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        let originalContentOffset = CGPoint(x: -externalContentInset.left, y: -externalContentInset.top)
+        DispatchQueue.main.async { () -> Void in
             self.scrollView.setContentOffset(originalContentOffset, animated: false)
         }
     }
     
     // MARK: - Private
     
-    private func isScrollViewIsTableViewAndHaveSections() -> Bool {
+    fileprivate func isScrollViewIsTableViewAndHaveSections() -> Bool {
         if let tableView = scrollView as? UITableView {
             return tableView.numberOfSections > 1 ? true : false
         }
@@ -242,13 +242,13 @@ public class TopRefreshContainerView: RefreshContainerView, RefreshContainerView
     
     // MARK: UIScrollView
 
-    private func setScrollViewContentInsetForLoadingAnimated(animated: Bool) -> Void {
+    fileprivate func setScrollViewContentInsetForLoadingAnimated(_ animated: Bool) -> Void {
         var loadingInset = externalContentInset;
-        loadingInset.top += CGRectGetHeight(bounds)
+        loadingInset.top += bounds.height
         setScrollViewContentInset(loadingInset, forLoadingAnimated: animated)
     }
     
-    private func setScrollViewContentInset(inset: UIEdgeInsets, forLoadingAnimated animated: Bool) -> Void {
+    fileprivate func setScrollViewContentInset(_ inset: UIEdgeInsets, forLoadingAnimated animated: Bool) -> Void {
         setScrollViewContentInset(inset, forLoadingAnimated: animated, completion: nil)
     }
 }

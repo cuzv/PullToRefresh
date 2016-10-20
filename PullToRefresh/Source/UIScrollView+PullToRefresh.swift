@@ -27,16 +27,16 @@
 import UIKit
 
 public extension UIScrollView {
-    private struct AssociatedKeys {
-        static var topRefreshContainerKey = "topRefreshContainerKey"
-        static var bottomRefreshContainerKey = "BottomRefreshContainerKey"
+    fileprivate struct AssociatedKeys {
+        static var topRefreshContainerKey = "com.mochxiao.pulltorefresh.topRefreshContainerKey"
+        static var bottomRefreshContainerKey = "com.mochxiao.pulltorefresh.BottomRefreshContainerKey"
     }
     
     public var topRefreshContainerView: TopRefreshContainerView? {
         set {
-            willChangeValueForKey(AssociatedKeys.topRefreshContainerKey)
+            willChangeValue(forKey: AssociatedKeys.topRefreshContainerKey)
             objc_setAssociatedObject(self, &AssociatedKeys.topRefreshContainerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-            didChangeValueForKey(AssociatedKeys.topRefreshContainerKey)
+            didChangeValue(forKey: AssociatedKeys.topRefreshContainerKey)
         }
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.topRefreshContainerKey) as? TopRefreshContainerView
@@ -45,9 +45,9 @@ public extension UIScrollView {
     
     public var bottomRefreshContainerView: BottomRefreshContainerView? {
         set {
-            willChangeValueForKey(AssociatedKeys.bottomRefreshContainerKey)
+            willChangeValue(forKey: AssociatedKeys.bottomRefreshContainerKey)
             objc_setAssociatedObject(self, &AssociatedKeys.bottomRefreshContainerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-            didChangeValueForKey(AssociatedKeys.bottomRefreshContainerKey)
+            didChangeValue(forKey: AssociatedKeys.bottomRefreshContainerKey)
         }
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.bottomRefreshContainerKey) as? BottomRefreshContainerView
@@ -58,11 +58,11 @@ public extension UIScrollView {
 // MARK: - TopRefreshContainerView
 
 public extension UIScrollView {
-    public func addTopRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {
+    public func addTopRefreshContainerView(height: CGFloat, handler: RefreshActionHandler?) -> Void {
         let topRefreshContainerView: TopRefreshContainerView = TopRefreshContainerView(height: height, scrollView: self)
         addSubview(topRefreshContainerView)
         self.topRefreshContainerView = topRefreshContainerView
-        self.topRefreshContainerView?.actionCallback = actionCallback
+        self.topRefreshContainerView?.actionHandler = handler
     }
     
     public func removeTopPullToRefresh() -> Void {
@@ -71,7 +71,7 @@ public extension UIScrollView {
         topRefreshContainerView = nil
     }
     
-    public func beginToPullToRefresh() -> Void {
+    public func beginTopPullToRefresh() -> Void {
         topRefreshContainerView?.beginRefreshing()
     }
     
@@ -79,7 +79,7 @@ public extension UIScrollView {
         topRefreshContainerView?.endRefreshing()
     }
     
-    public func setTopPullToRefreshEnable(enable: Bool) -> Void {
+    public func setTopPullToRefresh(enable: Bool) -> Void {
         topRefreshContainerView?.enable = enable
     }
 }
@@ -87,11 +87,11 @@ public extension UIScrollView {
 // MARK: - BottomRefreshContainerView
 
 public extension UIScrollView {
-    public func addBottomRefreshContainerViewWithHeight(height: CGFloat, actionCallback: RefreshActionCallback?) -> Void {        
+    public func addBottomRefreshContainerView(height: CGFloat, handler: RefreshActionHandler?) -> Void {
         let bottomRefreshContainerView: BottomRefreshContainerView = BottomRefreshContainerView(height: height, scrollView: self)
         addSubview(bottomRefreshContainerView)
         self.bottomRefreshContainerView = bottomRefreshContainerView
-        self.bottomRefreshContainerView?.actionCallback = actionCallback
+        self.bottomRefreshContainerView?.actionHandler = handler
     }
     
     public func removeBottomPullToRefresh() -> Void {
@@ -108,11 +108,11 @@ public extension UIScrollView {
         bottomRefreshContainerView?.endRefreshing()
     }
     
-    public func endBottomPullToRefreshWithStoppingContentOffset(stopContentOffset: Bool) -> Void {
+    public func endBottomPullToRefresh(withStoppingContentOffset stopContentOffset: Bool) -> Void {
         bottomRefreshContainerView?.endRefreshingWithStoppingContentOffset(stopContentOffset)
     }
     
-    public func setBottomPullToRefreshEnable(enable: Bool) -> Void {
+    public func setBottomPullToRefresh(enable: Bool) -> Void {
         bottomRefreshContainerView?.enable = enable
     }
 }

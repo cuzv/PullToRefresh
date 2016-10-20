@@ -10,20 +10,20 @@ import UIKit
 
 class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     deinit {
-        debugPrint("\(__FILE__):\(__LINE__):\(__FUNCTION__)")
+        debugPrint("\(#file):\(#line):\(#function)")
     }
     
     @IBOutlet weak var tableView: UITableView!
-    private lazy var data: [Data] = {
+    fileprivate lazy var data: [Data] = {
         var array: [Data] = []
-        for var i = 0; i < 10; i++ {
+        for i in 0 ..< 10 {
             let data = DataGenerator.generatorSignleRow()
             array.append(data)
         }
         return array
     }()
     
-    private var numberOfRows = 15
+    fileprivate var numberOfRows = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,16 +31,16 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         // Top
-        tableView.addTopRefreshContainerViewWithHeight(CGFloat(60.0)) {
+        tableView.addTopRefreshContainerView(height: CGFloat(60.0)) {
             [unowned self] (scrollView: UIScrollView) -> Void in
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * NSEC_PER_SEC))
-            dispatch_after(time, dispatch_get_main_queue(), {
+            let time = DispatchTime.now() + Double(Int64(1 * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: time, execute: {
 //                let range = Range(start: 0, end: 10)
 //                self.data = Array(self.data[range])
                 
-                for var i = 0; i < 5; i++ {
+                for _ in 0 ..< 5 {
                     let data = DataGenerator.generatorSignleRow()
-                    self.data.insert(data, atIndex: 0)
+                    self.data.insert(data, at: 0)
                 }
 
                 self.tableView.reloadData()
@@ -48,72 +48,72 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
             })
         }
 
-        let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRectMake(0, 0, 24, 24))
+        let topRefreshView: LoosenRefreshView = LoosenRefreshView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         tableView.topRefreshContainerView?.delegate = topRefreshView
         tableView.topRefreshContainerView?.addSubview(topRefreshView)
         tableView.topRefreshContainerView?.scrollToTopAfterEndRefreshing = true
         
         // Bottom
-        tableView.addBottomRefreshContainerViewWithHeight(60) {
+        tableView.addBottomRefreshContainerView(height: 60) {
             [unowned self] (scrollView: UIScrollView) -> Void in
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                for var i = 0; i < 5; i++ {
+            DispatchQueue.global().async(execute: {
+                for _ in 0 ..< 5 {
                     let data = DataGenerator.generatorSignleRow()
                     self.data.append(data)
                 }
                 
-                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * NSEC_PER_SEC))
-                dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+                let time = DispatchTime.now() + Double(Int64(1 * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+                DispatchQueue.main.asyncAfter(deadline: time, execute: { () -> Void in
                     self.tableView.reloadData()
                     scrollView.endBottomPullToRefresh()
                 })
             })
         }
 
-        let bottomRefreshView: InfiniteScrollView = InfiniteScrollView(frame: CGRectMake(0, 0, 24, 24))
+        let bottomRefreshView: InfiniteScrollView = InfiniteScrollView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         tableView.bottomRefreshContainerView?.addSubview(bottomRefreshView)
     }
     
     // MARK: Actions
     
-    @IBAction func insert(sender: UIBarButtonItem) {
+    @IBAction func insert(_ sender: UIBarButtonItem) {
         let previousContentOffSetHeight = self.tableView.contentOffset.y
         let previousContentHeight = self.tableView.contentSize.height
 //            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
         debugPrint("previousContentHeight: \(previousContentHeight)")
-        for var i = 0; i < 5; i++ {
+        for _ in 0 ..< 5 {
             let data = DataGenerator.generatorSignleRow()
-            self.data.insert(data, atIndex: 0)
+            self.data.insert(data, at: 0)
         }
         self.tableView.reloadData()
         let nowcontentHeight = self.tableView.contentSize.height
 //            - self.tableView.contentInset.top + self.tableView.contentInset.bottom
         debugPrint("nowcontentHeight: \(nowcontentHeight)")
-        self.tableView.contentOffset = CGPointMake(0, nowcontentHeight - previousContentHeight + previousContentOffSetHeight)
+        self.tableView.contentOffset = CGPoint(x: 0, y: nowcontentHeight - previousContentHeight + previousContentOffSetHeight)
     }
     
     // MARK: UITableViewDataSource
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell? = tableView.dequeueReusableCellWithIdentifier("Cell")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "Cell")
         if nil == cell {
-            cell = UITableViewCell(style: .Default, reuseIdentifier: "Cell")
+            cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         }
-        cell!.textLabel?.text = data[indexPath.row].text
+        cell!.textLabel?.text = data[(indexPath as NSIndexPath).row].text
         return cell!;
     }
 
     // MARK: UITableViewDelegate
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return data[indexPath.row].height
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return data[(indexPath as NSIndexPath).row].height
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 

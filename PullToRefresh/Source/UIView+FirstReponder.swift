@@ -30,7 +30,7 @@ internal extension UIView {
     internal var firstResponderViewController: UIViewController? {
         var responser: UIResponder? = self
         while let resp = responser as? UIView {
-            responser = resp.nextResponder()
+            responser = resp.next
         }
         return responser as? UIViewController
     }

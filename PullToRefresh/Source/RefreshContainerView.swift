@@ -54,50 +54,50 @@ import UIKit
 
 // MARK: - Const
 
-public let DefaultResetContentInsetAnimationDuration: NSTimeInterval = 0.3
+public let DefaultResetContentInsetAnimationDuration: TimeInterval = 0.3
 
 // MARK: - RefreshContainerViewState
 
 @objc public enum RefreshContainerViewState: Int {
-    case None = 0
-    case Triggered
-    case Loading
+    case none = 0
+    case triggered
+    case loading
 }
 
 @objc public enum PullToRefreshType: Int {
-    case LoosenRefresh
-    case InfiniteScroll
+    case loosenRefresh
+    case infiniteScroll
 }
 
 // MARK: - RefreshContainerViewDelegate
 
 @objc public protocol RefreshContainerViewDelegate {
-    optional func refreshContainerView(containerView: RefreshContainerView, didChangeState state: RefreshContainerViewState) -> Void
-    optional func refreshContainerView(containerView: RefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void
+    @objc optional func refreshContainerView(_ containerView: RefreshContainerView, didChangeState state: RefreshContainerViewState) -> Void
+    @objc optional func refreshContainerView(_ containerView: RefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void
 }
 
 // MARK: - RefreshContainerViewSubclassDelegate
 
 @objc internal protocol RefreshContainerViewSubclassDelegate {
     func resetFrame() -> Void
-    func didSetEnable(enable: Bool) -> Void    
-    func observeValueForContentInset(inset: UIEdgeInsets) -> Void
-    func scrollViewDidScrollToContentOffSet(offSet: CGPoint) -> Void
+    func didSetEnable(_ enable: Bool) -> Void    
+    func observeValue(forContentInset inset: UIEdgeInsets) -> Void
+    func scrollViewDidScroll(toContentOffSet offSet: CGPoint) -> Void
     func beginRefreshing() -> Void
     func endRefreshing() -> Void
 }
 
-// MARK: - RefreshActionCallback
+// MARK: - RefreshActionHandler
 
-public typealias RefreshActionCallback = ((scrollView: UIScrollView) -> Void)
+public typealias RefreshActionHandler = ((_ scrollView: UIScrollView) -> Void)
 
 // MARK: - RefreshContainerView
 
-public class RefreshContainerView: UIView {
-    public var state: RefreshContainerViewState = .None
-    public weak var delegate: RefreshContainerViewDelegate?
-    public var actionCallback: RefreshActionCallback?
-    public var preserveContentInset: Bool = false {
+open class RefreshContainerView: UIView {
+    open var state: RefreshContainerViewState = .none
+    open weak var delegate: RefreshContainerViewDelegate?
+    open var actionHandler: RefreshActionHandler?
+    open var preserveContentInset: Bool = false {
         didSet {
             if bounds.size.height > 0.0 {
                 subclass.resetFrame()
@@ -105,7 +105,7 @@ public class RefreshContainerView: UIView {
         }
     }
     
-    public var enable: Bool = true {
+    open var enable: Bool = true {
         didSet {
             if enable == oldValue {
                 return
@@ -123,7 +123,7 @@ public class RefreshContainerView: UIView {
     internal var updatingScrollViewContentInset: Bool = false
     internal let pullToRefreshType: PullToRefreshType
     
-    private weak var subclass: RefreshContainerViewSubclassDelegate!
+    fileprivate weak var subclass: RefreshContainerViewSubclassDelegate!
     
     // MARK: Initializers
     
@@ -132,13 +132,13 @@ public class RefreshContainerView: UIView {
         self.scrollView = scrollView
         self.pullToRefreshType = pullToRefreshType
         
-        let frame =  CGRectMake(0, 0, 0, height)
+        let frame =  CGRect(x: 0, y: 0, width: 0, height: height)
         super.init(frame: frame)
         
         subclass = self as? RefreshContainerViewSubclassDelegate
         assert(nil != subclass, "Self's Subclasses must conformsToProtocol `RefreshContainerViewSubclassDelegate`")
         
-        autoresizingMask = .FlexibleWidth
+        autoresizingMask = .flexibleWidth
         subclass.resetFrame()
     }
     
@@ -152,13 +152,13 @@ public class RefreshContainerView: UIView {
 
     #if DEBUG
     deinit {
-        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+        debugPrint("\(#file):\(#line):\(type(of: self)):\(#function)")
     }
     #endif
     
     // MARK: - Internal
     
-    internal func changeState(state: RefreshContainerViewState) -> Void {
+    internal func changeState(_ state: RefreshContainerViewState) -> Void {
         if self.state == state {
             return
         }
@@ -169,14 +169,14 @@ public class RefreshContainerView: UIView {
     
     // MARK: UIScrollView
     
-    internal func resetScrollViewContentInsetWithCompletion(completion: ((finished: Bool) -> Void)?) {
+    internal func resetScrollViewContentInsetWithCompletion(_ completion: ((_ finished: Bool) -> Void)?) {
         resetScrollViewContentInsetWithCompletion(completion, animated: true)
     }
 
-    internal func resetScrollViewContentInsetWithCompletion(completion: ((finished: Bool) -> Void)?, animated: Bool) {
+    internal func resetScrollViewContentInsetWithCompletion(_ completion: ((_ finished: Bool) -> Void)?, animated: Bool) {
         if animated {
-            let options: UIViewAnimationOptions = [.AllowUserInteraction, .BeginFromCurrentState]
-            UIView.animateWithDuration(DefaultResetContentInsetAnimationDuration,
+            let options: UIViewAnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
+            UIView.animate(withDuration: DefaultResetContentInsetAnimationDuration,
                 delay: 0,
                 options: options,
                 animations: { () -> Void in
@@ -185,11 +185,11 @@ public class RefreshContainerView: UIView {
                 completion: completion)
         } else {
             setScrollViewContentInset(self.externalContentInset)
-            completion?(finished: true)
+            completion?(true)
         }
     }
     
-    internal func setScrollViewContentInset(inset: UIEdgeInsets) -> Void {
+    internal func setScrollViewContentInset(_ inset: UIEdgeInsets) -> Void {
         let alreadyUpdating = updatingScrollViewContentInset
         if !alreadyUpdating {
             updatingScrollViewContentInset = true
@@ -200,27 +200,27 @@ public class RefreshContainerView: UIView {
         }
     }
     
-    internal func setScrollViewContentInset(inset: UIEdgeInsets, forLoadingAnimated animated: Bool, completion: ((finished: Bool) -> Void)?) -> Void {
+    internal func setScrollViewContentInset(_ inset: UIEdgeInsets, forLoadingAnimated animated: Bool, completion: ((_ finished: Bool) -> Void)?) -> Void {
         let updateClosure: () -> Void = {
             () -> Void in
             self.setScrollViewContentInset(inset)
         }
         
         if animated {
-            let options: UIViewAnimationOptions = [.AllowUserInteraction, .BeginFromCurrentState]
-            UIView.animateWithDuration(DefaultResetContentInsetAnimationDuration, delay: 0, options: options, animations: updateClosure, completion: completion)
+            let options: UIViewAnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
+            UIView.animate(withDuration: DefaultResetContentInsetAnimationDuration, delay: 0, options: options, animations: updateClosure, completion: completion)
         } else {
             UIView.performWithoutAnimation(updateClosure)
             if nil != completion {
-                completion?(finished: true)
+                completion?(true)
             }
         }
     }
     
     // MARK: Observing
     
-    public override func willMoveToSuperview(newSuperview: UIView?) {
-        super.willMoveToSuperview(newSuperview)
+    open override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
         
         if let superview = superview {
             removeObserversFromView(superview)
@@ -231,7 +231,7 @@ public class RefreshContainerView: UIView {
         }
     }
     
-    private func removeObserversFromView(view: UIView) -> Void {
+    fileprivate func removeObserversFromView(_ view: UIView) -> Void {
         assert(nil != view as? UIScrollView, "Self's superview must be kind of `UIScrollView`")
         
         view.removeObserver(self, forKeyPath: "contentOffset")
@@ -240,16 +240,16 @@ public class RefreshContainerView: UIView {
         view.removeObserver(self, forKeyPath: "contentInset")
     }
     
-    private func addScrollViewObservers(view: UIView) -> Void {
+    fileprivate func addScrollViewObservers(_ view: UIView) -> Void {
         assert(nil != view as? UIScrollView, "Self's superview must be kind of `UIScrollView`")
         
-        view.addObserver(self, forKeyPath: "contentOffset", options: NSKeyValueObservingOptions.New, context: nil)
-        view.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.New, context: nil)
-        view.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions.New, context: nil)
-        view.addObserver(self, forKeyPath: "contentInset", options: NSKeyValueObservingOptions.New, context: nil)
+        view.addObserver(self, forKeyPath: "contentOffset", options: NSKeyValueObservingOptions.new, context: nil)
+        view.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.new, context: nil)
+        view.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions.new, context: nil)
+        view.addObserver(self, forKeyPath: "contentInset", options: NSKeyValueObservingOptions.new, context: nil)
     }
     
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if !enable {
             return
         }
@@ -258,10 +258,10 @@ public class RefreshContainerView: UIView {
 //        debugPrint("\(keyPath): \(value)")
         
         if keyPath == "contentOffset" {
-            guard let offSet = change?[NSKeyValueChangeNewKey]?.CGPointValue else {
+            guard let offSet = (change?[NSKeyValueChangeKey.newKey] as AnyObject).cgPointValue else {
                 return
             }
-            subclass.scrollViewDidScrollToContentOffSet(offSet)
+            subclass.scrollViewDidScroll(toContentOffSet: offSet)
         } else if keyPath == "contentSize" {
             layoutSubviews()
             subclass.resetFrame()
@@ -269,10 +269,10 @@ public class RefreshContainerView: UIView {
             layoutSubviews()
         } else if keyPath == "contentInset" {
             if !updatingScrollViewContentInset {
-                guard let contentInset = change?[NSKeyValueChangeNewKey]?.UIEdgeInsetsValue() else {
+                guard let contentInset = (change?[NSKeyValueChangeKey.newKey] as AnyObject).uiEdgeInsetsValue else {
                     return
                 }
-                subclass.observeValueForContentInset(contentInset)
+                subclass.observeValue(forContentInset: contentInset)
             }
         }
     }

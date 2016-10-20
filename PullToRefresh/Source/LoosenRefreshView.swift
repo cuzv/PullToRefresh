@@ -26,11 +26,11 @@
 
 import UIKit
 
-public class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
+open class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
     
-    private let backCircluarLayer: CAShapeLayer
-    private let frontCircluarLayer: CAShapeLayer
-    private let activityIndicator: UIActivityIndicatorView
+    fileprivate let backCircluarLayer: CAShapeLayer
+    fileprivate let frontCircluarLayer: CAShapeLayer
+    fileprivate let activityIndicator: UIActivityIndicatorView
     
     override init(frame: CGRect) {
         backCircluarLayer = CAShapeLayer()
@@ -50,100 +50,100 @@ public class LoosenRefreshView: UIView, RefreshContainerViewDelegate {
     
     #if DEBUG
     deinit {
-        debugPrint("\(#file):\(#line):\(self.dynamicType):\(#function)")
+        debugPrint("\(#file):\(#line):\(type(of: self)):\(#function)")
     }
     #endif
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         guard let superview = superview else {
             return
         }
-        center = CGPointMake(CGRectGetMidX(superview.bounds), CGRectGetMidY(superview.bounds))
+        center = CGPoint(x: superview.bounds.midX, y: superview.bounds.midY)
         backCircluarLayer.frame = bounds
         frontCircluarLayer.frame = bounds
     }
     
     // MARK: Private custom
     
-    private func setupCircluarLayer() -> Void {
-        setupCommonCircluarLayer(backCircluarLayer, bounds: bounds, circluarWidth: 2, fillColor: UIColor.clearColor(), strokeColor: UIColor.lightGrayColor().colorWithAlphaComponent(0.5))
+    fileprivate func setupCircluarLayer() -> Void {
+        setupCommonCircluarLayer(backCircluarLayer, bounds: bounds, circluarWidth: 2, fillColor: UIColor.clear, strokeColor: UIColor.lightGray.withAlphaComponent(0.5))
         layer.addSublayer(backCircluarLayer)
         
-        setupCommonCircluarLayer(frontCircluarLayer, bounds: bounds, circluarWidth: 2, fillColor: UIColor.clearColor(), strokeColor: UIColor.lightGrayColor())
+        setupCommonCircluarLayer(frontCircluarLayer, bounds: bounds, circluarWidth: 2, fillColor: UIColor.clear, strokeColor: UIColor.lightGray)
         layer.addSublayer(frontCircluarLayer)
         updatePercent(0.0)
     }
     
-    private func setupCommonCircluarLayer(layer: CAShapeLayer, bounds: CGRect, circluarWidth: CGFloat, fillColor: UIColor, strokeColor: UIColor) -> Void {
-        let center: CGPoint = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
-        let radius: CGFloat = (CGRectGetWidth(bounds) - circluarWidth) / 2.0
+    fileprivate func setupCommonCircluarLayer(_ layer: CAShapeLayer, bounds: CGRect, circluarWidth: CGFloat, fillColor: UIColor, strokeColor: UIColor) -> Void {
+        let center: CGPoint = CGPoint(x: bounds.midX, y: bounds.midY)
+        let radius: CGFloat = (bounds.width - circluarWidth) / 2.0
         let startAngle: CGFloat = CGFloat(-90.0).convertAngleToRadian()
         let endAngle: CGFloat = CGFloat(270.0).convertAngleToRadian()
         let path: UIBezierPath = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         
         layer.frame = bounds
-        layer.fillColor = fillColor.CGColor
-        layer.strokeColor = strokeColor.CGColor
+        layer.fillColor = fillColor.cgColor
+        layer.strokeColor = strokeColor.cgColor
         layer.lineCap = kCALineJoinRound
-        layer.opaque = true
+        layer.isOpaque = true
         layer.lineWidth = circluarWidth
-        layer.path = path.CGPath
+        layer.path = path.cgPath
         layer.strokeEnd = 1.0
     }
     
-    private func setupSelfLayer() -> Void {
+    fileprivate func setupSelfLayer() -> Void {
         layer.masksToBounds = true
-        layer.cornerRadius = min(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
+        layer.cornerRadius = min(bounds.midX, bounds.midY)
     }
     
-    private func updatePercent(percent: CGFloat) -> Void {
+    fileprivate func updatePercent(_ percent: CGFloat) -> Void {
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         frontCircluarLayer.strokeEnd = percent
         CATransaction.commit()
     }
     
-    private func setupActivityIndicator() -> Void {
+    fileprivate func setupActivityIndicator() -> Void {
         activityIndicator.frame = bounds
-        activityIndicator.activityIndicatorViewStyle = .Gray
-        activityIndicator.hidden = true
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.isHidden = true
         addSubview(activityIndicator)
     }
     
     // MARK: TopRefreshContainerViewDelegate
     
-    public func refreshContainerView(containerView: RefreshContainerView, didChangeState state: RefreshContainerViewState) -> Void {
+    open func refreshContainerView(_ containerView: RefreshContainerView, didChangeState state: RefreshContainerViewState) -> Void {
         handleStateChange(state)
     }
     
-    public func refreshContainerView(containerView: RefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void {
+    open func refreshContainerView(_ containerView: RefreshContainerView, didChangeTriggerStateProgress progress: CGFloat) -> Void {
         handleProgress(progress, forState: containerView.state)
     }
 
-    private func handleStateChange(state: RefreshContainerViewState) -> Void {
-        if state == .None {
-            UIView.animateKeyframesWithDuration(DefaultResetContentInsetAnimationDuration,
+    fileprivate func handleStateChange(_ state: RefreshContainerViewState) -> Void {
+        if state == .none {
+            UIView.animateKeyframes(withDuration: DefaultResetContentInsetAnimationDuration,
                 delay: 0,
-                options: UIViewKeyframeAnimationOptions.BeginFromCurrentState,
+                options: UIViewKeyframeAnimationOptions.beginFromCurrentState,
                 animations: { () -> Void in
                     self.activityIndicator.alpha = 0.0
                 },
                 completion: nil)
             updatePercent(0.0)
         } else {
-            frontCircluarLayer.hidden = true
-            backCircluarLayer.hidden = true
+            frontCircluarLayer.isHidden = true
+            backCircluarLayer.isHidden = true
             activityIndicator.alpha = 1.0
             activityIndicator.startAnimating()
         }
     }
     
-    private func handleProgress(progress: CGFloat, forState state: RefreshContainerViewState) -> Void {
-        if progress > 0 && state == .None {
-            frontCircluarLayer.hidden = false
-            backCircluarLayer.hidden = false
+    fileprivate func handleProgress(_ progress: CGFloat, forState state: RefreshContainerViewState) -> Void {
+        if progress > 0 && state == .none {
+            frontCircluarLayer.isHidden = false
+            backCircluarLayer.isHidden = false
         }
         
         updatePercent(progress)
