@@ -258,7 +258,7 @@ open class RefreshContainerView: UIView {
 //        debugPrint("\(keyPath): \(value)")
         
         if keyPath == "contentOffset" {
-            guard let offSet = (change?[NSKeyValueChangeKey.newKey] as AnyObject).cgPointValue else {
+            guard let offSet = ((change?[NSKeyValueChangeKey.newKey]) as AnyObject).cgPointValue else {
                 return
             }
             subclass.scrollViewDidScroll(toContentOffSet: offSet)
@@ -269,7 +269,7 @@ open class RefreshContainerView: UIView {
             layoutSubviews()
         } else if keyPath == "contentInset" {
             if !updatingScrollViewContentInset {
-                guard let contentInset = (change?[NSKeyValueChangeKey.newKey] as AnyObject).uiEdgeInsetsValue else {
+                guard let contentInset = ((change?[NSKeyValueChangeKey.newKey]) as AnyObject).uiEdgeInsetsValue else {
                     return
                 }
                 subclass.observeValue(forContentInset: contentInset)
