@@ -95,7 +95,7 @@ public extension UIScrollView {
     }
     
     public func removeBottomPullToRefresh() -> Void {
-        endBottomPullToRefresh()
+        endBottomPullToRefresh(withStoppingContentOffset: true)
         bottomRefreshContainerView?.removeFromSuperview()
         bottomRefreshContainerView = nil
     }
