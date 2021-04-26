@@ -2,8 +2,8 @@
 //  SampleViewController.swift
 //  CHXRefreshControl
 //
-//  Created by Moch Xiao on 6/17/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/17/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     @IBOutlet weak var tableView: UITableView!
-    fileprivate lazy var data: [Data] = {
+    private lazy var data: [Data] = {
         var array: [Data] = []
         for i in 0 ..< 10 {
             let data = DataGenerator.generatorSignleRow()
@@ -23,16 +23,13 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return array
     }()
     
-    fileprivate var numberOfRows = 15
+    private var numberOfRows = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = UIColor(white: 0.97, alpha: 1)
-        
-        
+
         // Top
-        tableView.addTopRefreshContainerView(height: CGFloat(60.0)) {
-            [unowned self] (scrollView: UIScrollView) -> Void in
+        tableView.addTopRefreshContainerView(height: CGFloat(60.0)) { [unowned self] (scrollView: UIScrollView) -> Void in
             let time = DispatchTime.now() + Double(Int64(1 * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
             DispatchQueue.main.asyncAfter(deadline: time, execute: {
 //                let range = Range(start: 0, end: 10)
@@ -54,8 +51,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.topRefreshContainerView?.scrollToTopAfterEndRefreshing = true
         
         // Bottom
-        tableView.addBottomRefreshContainerView(height: 60) {
-            [unowned self] (scrollView: UIScrollView) -> Void in
+        tableView.addBottomRefreshContainerView(height: 60) { [unowned self] (scrollView: UIScrollView) -> Void in
             DispatchQueue.global().async(execute: {
                 for _ in 0 ..< 5 {
                     let data = DataGenerator.generatorSignleRow()
@@ -104,7 +100,7 @@ class SampleViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         }
         cell!.textLabel?.text = data[(indexPath as NSIndexPath).row].text
-        return cell!;
+        return cell!
     }
 
     // MARK: UITableViewDelegate

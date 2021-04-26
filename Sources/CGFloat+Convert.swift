@@ -2,8 +2,8 @@
 //  CGFloat+Convert.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/21/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/21/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,12 @@
 
 import UIKit
 
-public extension CGFloat {
-    public func convertAngleToRadian() -> CGFloat {
-        return CGFloat(Double(native) / 180.0 * M_PI)
+extension CGFloat {
+    func convertAngleToRadian() -> CGFloat {
+        return CGFloat(Double(native) / 180.0 * .pi)
     }
     
-    public func convertRadianToAngle() -> CGFloat {
-        return CGFloat(Double(native) / M_PI * 180.0)
+    func convertRadianToAngle() -> CGFloat {
+        return CGFloat(Double(native) / .pi * 180.0)
     }
 }

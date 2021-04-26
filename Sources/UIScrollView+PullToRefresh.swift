@@ -2,8 +2,8 @@
 //  UIScrollView+PullToRefresh.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/19/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/19/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@
 
 import UIKit
 
-public extension UIScrollView {
-    fileprivate struct AssociatedKeys {
+extension UIScrollView {
+    private struct AssociatedKeys {
         static var topRefreshContainerKey = "com.mochxiao.pulltorefresh.topRefreshContainerKey"
         static var bottomRefreshContainerKey = "com.mochxiao.pulltorefresh.BottomRefreshContainerKey"
     }
@@ -57,7 +57,7 @@ public extension UIScrollView {
 
 // MARK: - TopRefreshContainerView
 
-public extension UIScrollView {
+extension UIScrollView {
     public func addTopRefreshContainerView(height: CGFloat, handler: RefreshActionHandler?) -> Void {
         let topRefreshContainerView: TopRefreshContainerView = TopRefreshContainerView(height: height, scrollView: self)
         addSubview(topRefreshContainerView)
@@ -86,7 +86,7 @@ public extension UIScrollView {
 
 // MARK: - BottomRefreshContainerView
 
-public extension UIScrollView {
+extension UIScrollView {
     public func addBottomRefreshContainerView(height: CGFloat, handler: RefreshActionHandler?) -> Void {
         let bottomRefreshContainerView: BottomRefreshContainerView = BottomRefreshContainerView(height: height, scrollView: self)
         addSubview(bottomRefreshContainerView)

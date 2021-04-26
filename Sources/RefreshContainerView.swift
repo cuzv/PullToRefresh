@@ -2,8 +2,8 @@
 //  RefreshContainerView.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/21/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/21/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -123,7 +123,7 @@ open class RefreshContainerView: UIView {
     internal var updatingScrollViewContentInset: Bool = false
     internal let pullToRefreshType: PullToRefreshType
     
-    fileprivate weak var subclass: RefreshContainerViewSubclassDelegate!
+    private weak var subclass: RefreshContainerViewSubclassDelegate!
     
     // MARK: Initializers
     
@@ -175,11 +175,11 @@ open class RefreshContainerView: UIView {
 
     internal func resetScrollViewContentInsetWithCompletion(_ completion: ((_ finished: Bool) -> Void)?, animated: Bool) {
         if animated {
-            let options: UIViewAnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
+            let options: UIView.AnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
             UIView.animate(withDuration: DefaultResetContentInsetAnimationDuration,
                 delay: 0,
                 options: options,
-                animations: { () -> Void in
+                animations: {
                     self.setScrollViewContentInset(self.externalContentInset)
                 },
                 completion: completion)
@@ -207,7 +207,7 @@ open class RefreshContainerView: UIView {
         }
         
         if animated {
-            let options: UIViewAnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
+            let options: AnimationOptions = [.allowUserInteraction, .beginFromCurrentState]
             UIView.animate(withDuration: DefaultResetContentInsetAnimationDuration, delay: 0, options: options, animations: updateClosure, completion: completion)
         } else {
             UIView.performWithoutAnimation(updateClosure)
@@ -231,7 +231,7 @@ open class RefreshContainerView: UIView {
         }
     }
     
-    fileprivate func removeObserversFromView(_ view: UIView) -> Void {
+    private func removeObserversFromView(_ view: UIView) -> Void {
         assert(nil != view as? UIScrollView, "Self's superview must be kind of `UIScrollView`")
         
         view.removeObserver(self, forKeyPath: "contentOffset")
@@ -240,7 +240,7 @@ open class RefreshContainerView: UIView {
         view.removeObserver(self, forKeyPath: "contentInset")
     }
     
-    fileprivate func addScrollViewObservers(_ view: UIView) -> Void {
+    private func addScrollViewObservers(_ view: UIView) -> Void {
         assert(nil != view as? UIScrollView, "Self's superview must be kind of `UIScrollView`")
         
         view.addObserver(self, forKeyPath: "contentOffset", options: NSKeyValueObservingOptions.new, context: nil)

@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/17/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/17/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 
 import UIKit

@@ -2,8 +2,8 @@
 //  BottomRefreshView.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/21/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/21/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,11 @@
 import UIKit
 
 open class InfiniteScrollView: UIView {
-    open var animating: Bool = true
-    fileprivate let activityIndicator: UIActivityIndicatorView
-    
+    private var animating: Bool = true
+    private let activityIndicator = UIActivityIndicatorView()
+
     override init(frame: CGRect) {
-        activityIndicator = UIActivityIndicatorView()
-
         super.init(frame: frame)
-
         setupActivityIndicator()
     }
     
@@ -50,37 +47,40 @@ open class InfiniteScrollView: UIView {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
-        
-        guard let superview = superview else {
-            return
-        }
+
+        guard let superview = superview else { return }
         center = CGPoint(x: superview.bounds.midX, y: superview.bounds.midY)
     }
     
     open override func didMoveToWindow() {
-        if let _ = window , animating {
+        if nil != window , animating {
             startAnimating()
         }
     }
     
-    fileprivate func setupActivityIndicator() -> Void {
+    private func setupActivityIndicator() -> Void {
         activityIndicator.frame = bounds
-        activityIndicator.activityIndicatorViewStyle = .gray
         activityIndicator.isHidden = true
+        if #available(iOS 13.0, *) {
+            activityIndicator.color = .systemGray
+        }
         addSubview(activityIndicator)
     }
 
     open func startAnimating() -> Void {
         activityIndicator.startAnimating()
         activityIndicator.isHidden = false
-        
         animating = true
     }
     
     open func stopAnimating() -> Void {
         activityIndicator.stopAnimating()
         activityIndicator.isHidden = true
-        
         animating = false
+    }
+
+    open var activityIndicatorColor: UIColor? {
+        get { activityIndicator.color }
+        set { activityIndicator.color = newValue }
     }
 }

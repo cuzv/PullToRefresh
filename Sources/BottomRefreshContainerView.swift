@@ -2,8 +2,8 @@
 //  BottomRefreshContainerView.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/17/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/17/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,9 @@
 import UIKit
 
 open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerViewSubclassDelegate {
-
     open var additionalBottomOffsetForInfinityScrollTrigger: CGFloat = 0.0
-    fileprivate var infiniteScrollBottomContentInset: CGFloat = 0.0
-    fileprivate var shouldShowWhenDisabled: Bool = false {
+    private var infiniteScrollBottomContentInset: CGFloat = 0.0
+    private var shouldShowWhenDisabled: Bool = false {
         didSet {
             if shouldShowWhenDisabled {
                 isHidden = false
@@ -103,7 +102,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func handleInfiniteScrollScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
+    private func handleInfiniteScrollScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
         let contentHeight = adjustedHeightFromScrollViewContentSize()
         
         // The lower bound when infinite scroll should kick in
@@ -121,7 +120,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func handleLoosenRefreshScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
+    private func handleLoosenRefreshScrollViewDidScrollToContentOffSet(_ offSet: CGPoint) -> Void {
         
     }
     
@@ -139,13 +138,13 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func beginInfiniteScrollRefreshing() -> Void {
+    private func beginInfiniteScrollRefreshing() -> Void {
         if state == .none {
             startInfiniteScroll()
         }
     }
     
-    fileprivate func beginLoosenRefreshRefreshing() -> Void {
+    private func beginLoosenRefreshRefreshing() -> Void {
         // TODO:
     }
     
@@ -157,11 +156,11 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func endInfiniteScrollRefreshing() -> Void {
+    private func endInfiniteScrollRefreshing() -> Void {
         endRefreshingWithStoppingContentOffset(false)
     }
     
-    fileprivate func endLoosenRefreshRefreshing() -> Void {
+    private func endLoosenRefreshRefreshing() -> Void {
         // TODO:
     }
     
@@ -175,7 +174,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
     
     // MARK: - Private InfiniteScroll
     
-    fileprivate func startInfiniteScroll() -> Void {
+    private func startInfiniteScroll() -> Void {
         isHidden = false
         
         var contentInset = scrollView.contentInset
@@ -206,7 +205,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func stopInfiniteScrollWithStoppingContentOffset(_ stopContentOffset: Bool) -> Void {
+    private func stopInfiniteScrollWithStoppingContentOffset(_ stopContentOffset: Bool) -> Void {
         var contentInset = scrollView.contentInset
         contentInset.bottom -= bounds.height
         
@@ -231,7 +230,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
         }
     }
     
-    fileprivate func adjustedHeightFromScrollViewContentSize() -> CGFloat {
+    private func adjustedHeightFromScrollViewContentSize() -> CGFloat {
         let remainingHeight = bounds.height - scrollView.contentInset.top - scrollView.contentInset.bottom
         let contentSizeHeight = scrollView.contentSize.height
         return contentSizeHeight < remainingHeight ? remainingHeight : contentSizeHeight
@@ -239,7 +238,7 @@ open class BottomRefreshContainerView: RefreshContainerView, RefreshContainerVie
     
     // MARK: - UIScrollView
     
-    fileprivate func scrollToInfiniteIndicatorIfNeeded() -> Void {
+    private func scrollToInfiniteIndicatorIfNeeded() -> Void {
         if !scrollView.isDragging && state == .loading {
             
             // adjust content height for case when contentSize smaller than view bounds

@@ -2,8 +2,8 @@
 //  UIView+FirstReponder.swift
 //  PullToRefresh
 //
-//  Created by Moch Xiao on 6/21/15.
-//  Copyright © 2015 Moch Xiao. All rights reserved.
+//  Created by Shaw on 6/21/15.
+//  Copyright © 2015 ReadRain. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@
 
 import UIKit
 
-internal extension UIView {
-    internal var firstResponderViewController: UIViewController? {
+extension UIView {
+    var firstResponderViewController: UIViewController? {
         var responser: UIResponder? = self
         while let resp = responser as? UIView {
             responser = resp.next
